@@ -1,7 +1,6 @@
 package com.nju.edu.util;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,19 +25,21 @@ public class ReadImage {
 
     public static BufferedImage blast;
 
+    private static final String ROOT = "src/main/resources/image/";
+
     static {
         try {
-            MonsterOne = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\monster1.png"));
-            MonsterTwo = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\monster2.png"));
-            MonsterThree = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\monster3.png"));
-            Calabash = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\calabash.png"));
-            GrandFather = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\grandfather.png"));
-            MonsterBullet = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\monsterBullet.png"));
-            CalabashBullet = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\calabashBullet.png"));
+            MonsterOne = ImageIO.read(new FileInputStream(ROOT + "monster1.png"));
+            MonsterTwo = ImageIO.read(new FileInputStream(ROOT + "monster2.png"));
+            MonsterThree = ImageIO.read(new FileInputStream(ROOT + "monster3.png"));
+            Calabash = ImageIO.read(new FileInputStream(ROOT + "calabash.png"));
+            GrandFather = ImageIO.read(new FileInputStream(ROOT + "grandfather.png"));
+            MonsterBullet = ImageIO.read(new FileInputStream(ROOT + "monsterBullet.png"));
+            CalabashBullet = ImageIO.read(new FileInputStream(ROOT + "calabashBullet.png"));
             // TODO: find a background image
-            startBackground = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\startBg.png"));
-            runningBackground = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\runningBg.png"));
-            blast = ImageIO.read(new FileInputStream("D:\\Java\\Programs\\JavaAdvancedProgramming\\CalabashGame\\image\\blast.png"));
+            startBackground = ImageIO.read(new FileInputStream(ROOT + "startBg.png"));
+            runningBackground = ImageIO.read(new FileInputStream(ROOT + "runningBg.png"));
+            blast = ImageIO.read(new FileInputStream(ROOT + "blast.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
