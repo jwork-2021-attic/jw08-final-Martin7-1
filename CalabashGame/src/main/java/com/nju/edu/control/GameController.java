@@ -545,9 +545,7 @@ public class GameController extends JPanel implements Runnable {
      */
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        BufferedImage bgImage = ReadImage.runningBackground;
-        g.drawImage(bgImage, 0, 0, 1080, 680, null);
+        paintWorld(g);
     }
 
     @Override
@@ -561,7 +559,6 @@ public class GameController extends JPanel implements Runnable {
             paintStart(g);
             // 如果为游戏运行状态
         } else if (STATE == GameState.RUNNING) {
-            paintWorld(g);
             // 绘制葫芦娃
             paintCalabash(g);
             // 绘制妖精
@@ -585,7 +582,11 @@ public class GameController extends JPanel implements Runnable {
 
     private void paintWorld(Graphics g) {
         // 绘制世界地图
-
+        for (int x = 0; x < GameScreen.getWid(); x += 10) {
+            for (int y = 0; y < GameScreen.getHei(); y += 10) {
+                g.drawImage(world.get(x / 10, y / 10).getImage(), x, y, 10, 10, null);
+            }
+        }
     }
 
     private void paintStart(Graphics g) {

@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  */
 public class Floor extends Thing {
 
-    private static BufferedImage image = ReadImage.wall;
+    private static BufferedImage image = ReadImage.floor;
 
     public Floor(World world) {
         super(image, world);

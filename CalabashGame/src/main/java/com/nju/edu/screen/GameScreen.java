@@ -15,8 +15,8 @@ public class GameScreen extends JFrame {
      * 用一个单独线程池来管理fps
      */
     private ExecutorService render = Executors.newSingleThreadExecutor();
-    private static final int WIDTH = 1080;
-    private static final int HEIGHT = 680;
+    private static final int WIDTH = 1200;
+    private static final int HEIGHT = 600;
     private GameController gameController = new GameController();
 
     private final String windowTitle;

@@ -7,8 +7,8 @@ import com.nju.edu.screen.GameScreen;
  */
 public class World {
 
-    public static final int WIDTH = GameScreen.getWid();
-    public static final int HEIGHT = GameScreen.getHei();
+    public static final int WIDTH = GameScreen.getWid() / 10;
+    public static final int HEIGHT = GameScreen.getHei() / 10;
 
     private static World theWorld;
 

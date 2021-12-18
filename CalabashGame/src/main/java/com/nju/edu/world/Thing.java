@@ -30,4 +30,8 @@ public class Thing {
     }
 
     private BufferedImage image;
+
+    public BufferedImage getImage() {
+        return this.image;
+    }
 }
