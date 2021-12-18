@@ -582,15 +582,15 @@ public class GameController extends JPanel implements Runnable {
 
     private void paintWorld(Graphics g) {
         // 绘制世界地图
-        for (int x = 0; x < GameScreen.getWid(); x += 10) {
-            for (int y = 0; y < GameScreen.getHei(); y += 10) {
-                g.drawImage(world.get(x / 10, y / 10).getImage(), x, y, 10, 10, null);
+        for (int x = 0; x < GameScreen.getWid(); x += 50) {
+            for (int y = 0; y < GameScreen.getHei(); y += 50) {
+                g.drawImage(world.get(x / 50, y / 50).getImage(), x, y, 50, 50, null);
             }
         }
     }
 
     private void paintStart(Graphics g) {
-        g.drawImage(ReadImage.startBackground, 0, 0, 1080, 680, null);
+        g.drawImage(ReadImage.startBackground, 0, 0, 1000, 1000, null);
         Font font = new Font("黑体", Font.PLAIN, 20);
         g.setColor(Color.WHITE);
         g.setFont(font);
