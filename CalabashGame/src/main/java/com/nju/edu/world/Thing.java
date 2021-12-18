@@ -1,6 +1,7 @@
 package com.nju.edu.world;
 
-import java.awt.Color;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * @author Zyi
@@ -23,25 +24,10 @@ public class Thing {
         this.tile = tile;
     }
 
-    Thing(Color color, char glyph, World world) {
-        this.color = color;
-        this.glyph = glyph;
+    Thing(BufferedImage image, World world) {
+        this.image = image;
         this.world = world;
     }
 
-    private Color color;
-
-    public Color getColor() {
-        return this.color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    private final char glyph;
-
-    public char getGlyph() {
-        return this.glyph;
-    }
+    private BufferedImage image;
 }

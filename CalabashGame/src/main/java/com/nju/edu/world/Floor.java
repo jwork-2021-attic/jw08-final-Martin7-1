@@ -1,16 +1,18 @@
 package com.nju.edu.world;
 
+import com.nju.edu.util.ReadImage;
+
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 /**
  * @author Zyi
  */
 public class Floor extends Thing {
 
-    public Floor(World world, boolean isReach) {
-        super(Color.gray, (char) 250, world);
-        if (isReach) {
-            setColor(Color.yellow);
-        }
+    private static BufferedImage image = ReadImage.wall;
+
+    public Floor(World world) {
+        super(image, world);
     }
 }

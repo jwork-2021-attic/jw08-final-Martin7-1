@@ -7,6 +7,7 @@ import com.nju.edu.sprite.*;
 import com.nju.edu.util.GameState;
 import com.nju.edu.util.ReadImage;
 import com.nju.edu.util.TimeControl;
+import com.nju.edu.world.World;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,6 +62,7 @@ public class GameController extends JPanel implements Runnable {
 
     private boolean isExited = false;
     private CalabashThread calabashThread = new CalabashThread();
+    private World world = World.getWorld();
 
     public GameController() {
         // 并发容器的使用
@@ -559,6 +561,7 @@ public class GameController extends JPanel implements Runnable {
             paintStart(g);
             // 如果为游戏运行状态
         } else if (STATE == GameState.RUNNING) {
+            paintWorld(g);
             // 绘制葫芦娃
             paintCalabash(g);
             // 绘制妖精
@@ -580,7 +583,12 @@ public class GameController extends JPanel implements Runnable {
         }
     }
 
-    public void paintStart(Graphics g) {
+    private void paintWorld(Graphics g) {
+        // 绘制世界地图
+
+    }
+
+    private void paintStart(Graphics g) {
         g.drawImage(ReadImage.startBackground, 0, 0, 1080, 680, null);
         Font font = new Font("黑体", Font.PLAIN, 20);
         g.setColor(Color.WHITE);
@@ -592,7 +600,7 @@ public class GameController extends JPanel implements Runnable {
         g.drawString("作者:Martin", 50, 650);
     }
 
-    public void paintOver(Graphics g) {
+    private void paintOver(Graphics g) {
         // 绘制结束界面
         // TODO
     }

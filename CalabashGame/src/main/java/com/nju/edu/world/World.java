@@ -10,29 +10,36 @@ public class World {
     public static final int WIDTH = GameScreen.getWid();
     public static final int HEIGHT = GameScreen.getHei();
 
+    private static World theWorld;
+
+    public static World getWorld() {
+        if (theWorld == null) {
+            theWorld = new World();
+        }
+        return theWorld;
+    }
+
     private Tile<Thing>[][] tiles;
 
     @SuppressWarnings("unchecked")
-    public World() {
+    private World() {
         if (tiles == null) {
             tiles = new Tile[WIDTH][HEIGHT];
         }
 
         setMap();
-
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                tiles[i][j] = new Tile<>(i, j);
-                tiles[i][j].setThing(new Floor(this, true));
-            }
-        }
     }
 
     /**
      * 设置地图
      */
     private void setMap() {
-
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                tiles[i][j] = new Tile<>(i, j);
+                tiles[i][j].setThing(new Floor(this));
+            }
+        }
     }
 
     public Thing get(int x, int y) {
