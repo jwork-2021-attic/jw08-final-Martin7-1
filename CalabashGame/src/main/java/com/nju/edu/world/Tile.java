@@ -1,9 +1,11 @@
 package com.nju.edu.world;
 
+import com.nju.edu.sprite.GameObject;
+
 /**
  * @author Zyi
  */
-public class Tile<T extends Thing> {
+public class Tile<T extends GameObject> {
 
     private T thing;
     private int xPos;

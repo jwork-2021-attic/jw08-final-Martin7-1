@@ -1,6 +1,7 @@
 package com.nju.edu.world;
 
 import com.nju.edu.screen.GameScreen;
+import com.nju.edu.sprite.GameObject;
 
 /**
  * @author Zyi
@@ -19,7 +20,8 @@ public class World {
         return theWorld;
     }
 
-    private Tile<Thing>[][] tiles;
+    private Tile<GameObject>[][] tiles;
+    private Tile<GameObject>[][] characters;
 
     @SuppressWarnings("unchecked")
     private World() {
@@ -42,11 +44,20 @@ public class World {
         }
     }
 
-    public Thing get(int x, int y) {
+    public void addGameObject(GameObject gameObject) {
+        // 在世界上绘制人物
+        int xPos = gameObject.getX();
+        int yPos = gameObject.getY();
+
+        this.characters[xPos][yPos] = new Tile<>(xPos, yPos);
+        this.characters[xPos][yPos].setThing(gameObject);
+    }
+
+    public GameObject get(int x, int y) {
         return this.tiles[x][y].getThing();
     }
 
-    public void put(Thing t, int x, int y) {
+    public void put(GameObject t, int x, int y) {
         this.tiles[x][y].setThing(t);
     }
 }
