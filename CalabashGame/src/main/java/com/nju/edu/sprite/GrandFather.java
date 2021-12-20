@@ -24,8 +24,9 @@ public class GrandFather extends Sprite {
 
     private GrandFather(World world, int x, int y) {
         super(world, 100, 100, ReadImage.GrandFather);
-        this.tile.setxPos(x);
-        this.tile.setyPos(y);
+        this.setX(x);
+        this.setY(y);
+        world.put(this, x, y);
     }
 
     /**
@@ -36,26 +37,30 @@ public class GrandFather extends Sprite {
     private int speed = calabash.getSpeed();
 
     public void moveUp() {
-        if (this.tile.getyPos() - speed >= 0) {
-            this.tile.setyPos(tile.getyPos() - speed);
+        if (getY() - speed >= 0) {
+            setY(getY() - speed);
+            world.put(this, getX(), getY());
         }
     }
 
     public void moveDown() {
-        if (this.tile.getyPos() + speed <= GameScreen.getHei() - 150) {
-            this.tile.setyPos(this.tile.getyPos() + speed);
+        if (getY() + speed <= GameScreen.getHei() - 150) {
+            setY(getY() + speed);
+            world.put(this, getX(), getY());
         }
     }
 
     public void moveLeft() {
-        if (this.tile.getxPos() - speed >= 0) {
-            this.tile.setxPos(this.tile.getxPos() - speed);
+        if (getX() - speed >= 0) {
+            setX(getX() - speed);
+            world.put(this, getX(), getY());
         }
     }
 
     public void moveRight() {
-        if (this.tile.getxPos() + speed <= GameScreen.getWid() - 150) {
-            this.tile.setxPos(this.tile.getxPos() + speed);
+        if (getX() + speed <= GameScreen.getWid() - 150) {
+            setX(getX() + speed);
+            world.put(this, getX(), getY());
         }
     }
 
