@@ -4,13 +4,14 @@ import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.skill.Skill;
 import com.nju.edu.util.ReadImage;
+import com.nju.edu.world.World;
 
 /**
  * @author Zyi
  */
 public class Calabash extends Sprite {
 
-    private static final Calabash CALABASH = new Calabash(100, 320);
+    private static final Calabash CALABASH = new Calabash(World.getWorld(), 100, 320);
 
     public static Calabash getInstance() {
         return CALABASH;
@@ -24,42 +25,46 @@ public class Calabash extends Sprite {
     public int HP = 100;
     private int fireInterval = 120;
 
-    private Calabash(int x, int y) {
-        super(x, y, 100, 100, ReadImage.Calabash);
+    private Calabash(World world, int x, int y) {
+        super(world, 100, 100, ReadImage.Calabash);
+        this.tile.setxPos(x);
+        this.tile.setyPos(y);
         this.speed = 10;
     }
 
-    private Calabash(int x, int y, int speed) {
-        super(x, y, 100, 100, ReadImage.Calabash);
+    private Calabash(World world, int x, int y, int speed) {
+        super(world, 100, 100, ReadImage.Calabash);
+        this.tile.setxPos(x);
+        this.tile.setyPos(y);
         this.speed = speed;
     }
 
     public void moveUp() {
-        if (this.y - speed >= 0) {
-            this.y -= speed;
+        if (this.tile.getyPos() - speed >= 0) {
+            this.tile.setyPos(this.tile.getyPos() - speed);
         }
     }
 
     public void moveDown() {
-        if (this.y + speed <= GameScreen.getHei() - 150) {
-            this.y += speed;
+        if (this.tile.getyPos() + speed <= GameScreen.getHei() - 150) {
+            this.tile.setyPos(this.tile.getyPos() + speed);
         }
     }
 
     public void moveLeft() {
-        if (this.x - speed >= 0) {
-            this.x -= speed;
+        if (this.tile.getxPos() - speed >= 0) {
+            this.tile.setxPos(this.tile.getxPos() - speed);
         }
     }
 
     public void moveRight() {
-        if (this.x + speed <= GameScreen.getWid() - 150) {
-            this.x += speed;
+        if (this.tile.getxPos() + speed <= GameScreen.getWid() - 150) {
+            this.tile.setxPos(this.tile.getxPos() + speed);
         }
     }
 
     public CalabashBullet calabashFire() {
-        CalabashBullet bullet = new CalabashBullet(this.x + width, this.y + height / 2);
+        CalabashBullet bullet = new CalabashBullet(this.tile.getxPos() + width, this.tile.getyPos() + height / 2);
         return bullet;
     }
 

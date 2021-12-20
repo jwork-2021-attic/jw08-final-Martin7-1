@@ -24,6 +24,8 @@ public class GrandFather extends Sprite {
 
     private GrandFather(World world, int x, int y) {
         super(world, 100, 100, ReadImage.GrandFather);
+        this.tile.setxPos(x);
+        this.tile.setyPos(y);
     }
 
     /**
