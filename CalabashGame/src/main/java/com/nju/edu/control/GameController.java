@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -415,16 +414,16 @@ public class GameController extends JPanel implements Runnable {
             Random random = new Random();
             // 妖精一出现的时间
             if (time % MONSTER_ONE_APPEAR == 0) {
-                MonsterOne monsterOne = new MonsterOne(GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
+                MonsterOne monsterOne = new MonsterOne(world, GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
                 monsterOneList.add(monsterOne);
             }
             // 妖精二出现的时间
             if (time % MONSTER_TWO_APPEAR == 0) {
-                MonsterTwo monsterTwo = new MonsterTwo(GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
+                MonsterTwo monsterTwo = new MonsterTwo(world, GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
                 monsterTwoList.add(monsterTwo);
             }
             if (time % MONSTER_THREE_APPEAR == 0) {
-                MonsterThree monsterThree = new MonsterThree(GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
+                MonsterThree monsterThree = new MonsterThree(world, GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
                 monsterThreeList.add(monsterThree);
             }
         }

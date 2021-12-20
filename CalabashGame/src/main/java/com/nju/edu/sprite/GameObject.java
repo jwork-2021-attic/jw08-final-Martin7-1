@@ -1,6 +1,5 @@
 package com.nju.edu.sprite;
 
-import com.nju.edu.world.Thing;
 import com.nju.edu.world.Tile;
 import com.nju.edu.world.World;
 
@@ -95,6 +94,18 @@ public abstract class GameObject {
     public void transfer(int dx, int dy) {
         this.tile.setxPos(this.tile.getxPos() + dx);
         this.tile.setyPos(this.tile.getyPos() + dy);
+    }
+
+    /**
+     * TODO: 将游戏物体的移动替换成调用以下两个方法
+     * @param dx 移动的距离
+     */
+    public void transferX(int dx) {
+        this.tile.setxPos(getX() + dx);
+    }
+
+    public void transferY(int dy) {
+        this.tile.setyPos(getY() + dy);
     }
 
     public int getX() {
