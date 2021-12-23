@@ -2,21 +2,19 @@ package com.nju.edu.bullet;
 
 import com.nju.edu.sprite.Sprite;
 import com.nju.edu.util.ReadImage;
-import com.nju.edu.world.World;
+
+import java.io.Serializable;
 
 /**
  * @author Zyi
  */
-public class MonsterBullet extends Sprite {
+public class MonsterBullet extends Sprite implements Serializable {
 
     private final int interval = 20;
     private int speed;
 
-    public MonsterBullet(World world, int x, int y) {
-        super(world, 10, 10, ReadImage.MonsterBullet);
-        setX(x);
-        setY(y);
-        world.put(this, getX(), getY());
+    public MonsterBullet(int x, int y) {
+        super(x, y, 26, 26, ReadImage.MonsterBullet);
         this.speed = 8;
     }
 
@@ -24,7 +22,7 @@ public class MonsterBullet extends Sprite {
     public void move(long time) {
         // 每隔一段时间移动
         if (time % this.interval == 0) {
-            transferX(-speed);
+            this.x -= speed;
         }
     }
 }

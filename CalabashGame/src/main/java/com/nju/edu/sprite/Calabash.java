@@ -3,21 +3,18 @@ package com.nju.edu.sprite;
 import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.skill.Skill;
-import com.nju.edu.skill.SkillName;
 import com.nju.edu.util.ReadImage;
-import com.nju.edu.world.World;
+
+import java.io.Serializable;
 
 /**
  * @author Zyi
  */
-public class Calabash extends Sprite {
+public class Calabash extends Sprite implements Serializable {
 
-    private static Calabash CALABASH;
+    private static final Calabash CALABASH = new Calabash(100, 320);
 
     public static Calabash getInstance() {
-        if (CALABASH == null) {
-            CALABASH = new Calabash(World.getWorld(), 0, 10);
-        }
         return CALABASH;
     }
 
@@ -29,52 +26,42 @@ public class Calabash extends Sprite {
     public int HP = 100;
     private int fireInterval = 120;
 
-    private Calabash(World world, int x, int y) {
-        super(world, 50, 50, ReadImage.Calabash);
-        setX(x);
-        setY(y);
-        world.put(this, getX(), getY());
+    private Calabash(int x, int y) {
+        super(x, y, 100, 100, ReadImage.Calabash);
         this.speed = 10;
     }
 
-    private Calabash(World world, int x, int y, int speed) {
-        super(world, 50, 50, ReadImage.Calabash);
-        setX(x);
-        setY(y);
-        world.put(this, getX(), getY());
+    private Calabash(int x, int y, int speed) {
+        super(x, y, 100, 100, ReadImage.Calabash);
         this.speed = speed;
     }
 
     public void moveUp() {
-        if (getY() - speed >= 0) {
-            setY(getY() - speed);
-            world.put(this, getX(), getY());
+        if (this.y - speed >= 0) {
+            this.y -= speed;
         }
     }
 
     public void moveDown() {
-        if (getY() + speed <= world.getHeight() - 1) {
-            setY(getY() + speed);
-            world.put(this, getX(), getY());
+        if (this.y + speed <= GameScreen.getHei() - 150) {
+            this.y += speed;
         }
     }
 
     public void moveLeft() {
-        if (getX() - speed >= 0) {
-            setX(getX() - speed);
-            world.put(this, getX(), getY());
+        if (this.x - speed >= 0) {
+            this.x -= speed;
         }
     }
 
     public void moveRight() {
-        if (getX() + speed <= world.getWidth() - 1) {
-            setX(getX() + speed);
-            world.put(this, getX(), getY());
+        if (this.x + speed <= GameScreen.getWid() - 150) {
+            this.x += speed;
         }
     }
 
     public CalabashBullet calabashFire() {
-        CalabashBullet bullet = new CalabashBullet(world, getX() + width, getY() + height / 50);
+        CalabashBullet bullet = new CalabashBullet(this.x + width, this.y + height / 2);
         return bullet;
     }
 
@@ -150,11 +137,11 @@ public class Calabash extends Sprite {
     public void clearSkillImpact() {
         // 根据当前技能来清空技能效果
         if (this.skill != null) {
-            if (this.skill.getName() == SkillName.MOVE_SKILL && this.speed == 15) {
+            if ("MoveSkill".equals(this.skill.getName()) && this.speed == 15) {
                 speedDown();
-            } else if (this.skill.getName() == SkillName.CD_SKILL && this.fireInterval == 80) {
+            } else if ("CDSkill".equals(this.skill.getName()) && this.fireInterval == 80) {
                 this.fireInterval = 120;
-            } else if (this.skill.getName() == SkillName.RECOVER_SKILL){
+            } else {
                 // nothing to do, recover do not need to reset
             }
         }

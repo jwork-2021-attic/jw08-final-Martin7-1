@@ -3,17 +3,17 @@ package com.nju.edu.control;
 import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.bullet.MonsterBullet;
 import com.nju.edu.screen.GameScreen;
-import com.nju.edu.skill.SkillName;
 import com.nju.edu.sprite.*;
 import com.nju.edu.util.GameState;
 import com.nju.edu.util.ReadImage;
 import com.nju.edu.util.TimeControl;
-import com.nju.edu.world.World;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -50,7 +50,6 @@ public class GameController extends JPanel implements Runnable {
      */
     private JLabel skillLabel;
 
-    private World world = World.getWorld();
     private Calabash calabash;
     private GrandFather grandFather;
     private List<MonsterOne> monsterOneList;
@@ -115,7 +114,7 @@ public class GameController extends JPanel implements Runnable {
             for (int j = 0; j < calabashBulletLength; j++) {
                 CalabashBullet bullet = calabashBulletList.get(j);
                 if (GameObject.isCollide(monsterOne, bullet)) {
-                    Blast blast = new Blast(world, bullet.getX(), bullet.getY());
+                    Blast blast = new Blast(bullet.getX(), bullet.getY());
                     blastList.add(blast);
                     calabashBulletList.remove(bullet);
                     monsterOneList.remove(monsterOne);
@@ -140,7 +139,7 @@ public class GameController extends JPanel implements Runnable {
             for (int j = 0; j < calabashBulletLength; j++) {
                 CalabashBullet bullet = calabashBulletList.get(j);
                 if (GameObject.isCollide(monsterTwo, bullet)) {
-                    Blast blast = new Blast(world, bullet.getX(), bullet.getY());
+                    Blast blast = new Blast(bullet.getX(), bullet.getY());
                     blastList.add(blast);
                     calabashBulletList.remove(bullet);
                     monsterTwoList.remove(monsterTwo);
@@ -163,7 +162,7 @@ public class GameController extends JPanel implements Runnable {
             for (int j = 0; j < calabashBulletLength; j++) {
                 CalabashBullet bullet = calabashBulletList.get(j);
                 if (GameObject.isCollide(monsterThree, bullet)) {
-                    Blast blast = new Blast(world, bullet.getX(), bullet.getY());
+                    Blast blast = new Blast(bullet.getX(), bullet.getY());
                     blastList.add(blast);
                     calabashBulletList.remove(bullet);
                     monsterThreeList.remove(monsterThree);
@@ -218,7 +217,7 @@ public class GameController extends JPanel implements Runnable {
 
 
         public CalabashThread() {
-            System.out.println("[CalabashThead]created, name " + thread.getName());
+            System.out.println("[CalabashThead]created");
             init();
         }
 
@@ -279,7 +278,7 @@ public class GameController extends JPanel implements Runnable {
                     calabash.useSkill();
                     // 只能够使用一次技能
                     calabash.setFirstUse();
-                    if (calabash.getCurSkill().getName() == SkillName.RECOVER_SKILL) {
+                    if ("RecoverSkill".equals(calabash.getCurSkill().getName())) {
                         // 更改血量的显示
                         HPLabel.setText("HP: " + calabash.getHP());
                     }
@@ -415,16 +414,16 @@ public class GameController extends JPanel implements Runnable {
             Random random = new Random();
             // 妖精一出现的时间
             if (time % MONSTER_ONE_APPEAR == 0) {
-                MonsterOne monsterOne = new MonsterOne(world, world.getWidth(), random.nextInt(world.getHeight() - 2));
+                MonsterOne monsterOne = new MonsterOne(GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
                 monsterOneList.add(monsterOne);
             }
             // 妖精二出现的时间
             if (time % MONSTER_TWO_APPEAR == 0) {
-                MonsterTwo monsterTwo = new MonsterTwo(world, world.getWidth(), random.nextInt(world.getHeight() - 2));
+                MonsterTwo monsterTwo = new MonsterTwo(GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
                 monsterTwoList.add(monsterTwo);
             }
             if (time % MONSTER_THREE_APPEAR == 0) {
-                MonsterThree monsterThree = new MonsterThree(world, world.getWidth(), random.nextInt(world.getHeight() - 2));
+                MonsterThree monsterThree = new MonsterThree(GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
                 monsterThreeList.add(monsterThree);
             }
         }
@@ -437,7 +436,7 @@ public class GameController extends JPanel implements Runnable {
 
         public GrandfatherThread() {
             // test
-            System.out.println("[GrandfatherThread]created, name " + thread.getName());
+            System.out.println("[GrandfatherThread]created");
         }
 
         @Override
@@ -545,7 +544,9 @@ public class GameController extends JPanel implements Runnable {
      */
     @Override
     public void paintComponent(Graphics g) {
-        paintWorld(g);
+        super.paintComponent(g);
+        BufferedImage bgImage = ReadImage.runningBackground;
+        g.drawImage(bgImage, 0, 0, 1080, 680, null);
     }
 
     @Override
@@ -580,17 +581,8 @@ public class GameController extends JPanel implements Runnable {
         }
     }
 
-    private void paintWorld(Graphics g) {
-        // 绘制世界地图
-        for (int x = 0; x < GameScreen.getWid(); x += 50) {
-            for (int y = 0; y < GameScreen.getHei(); y += 50) {
-                g.drawImage(world.get(x / 50, y / 50).getImage(), x, y, 50, 50, null);
-            }
-        }
-    }
-
-    private void paintStart(Graphics g) {
-        g.drawImage(ReadImage.startBackground, 0, 0, 1000, 1000, null);
+    public void paintStart(Graphics g) {
+        g.drawImage(ReadImage.startBackground, 0, 0, 1080, 680, null);
         Font font = new Font("黑体", Font.PLAIN, 20);
         g.setColor(Color.WHITE);
         g.setFont(font);
@@ -601,7 +593,7 @@ public class GameController extends JPanel implements Runnable {
         g.drawString("作者:Martin", 50, 650);
     }
 
-    private void paintOver(Graphics g) {
+    public void paintOver(Graphics g) {
         // 绘制结束界面
         // TODO
     }
@@ -649,5 +641,13 @@ public class GameController extends JPanel implements Runnable {
         for (MonsterBullet bullet : this.monsterBulletList) {
             bullet.draw(g);
         }
+    }
+
+    /**
+     * 保存当前游戏的数据
+     */
+    public void storeData() {
+        // 保存当前有的葫芦娃、爷爷和妖精的属性即可
+        // try (FileInputStream fileOut = new FileInputStream("resources/"))
     }
 }
