@@ -18,7 +18,7 @@ public class Calabash extends Sprite implements Serializable {
         return CALABASH;
     }
 
-    public Skill skill;
+    public transient Skill skill;
     private boolean isFirstUse = true;
     /**
      * 葫芦娃的血量

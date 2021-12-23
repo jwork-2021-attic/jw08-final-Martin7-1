@@ -515,6 +515,12 @@ public class GameController extends JPanel implements Runnable {
         JButton stopButton = new JButton("暂停");
         stopButton.setForeground(Color.RED);
         stopButton.setContentAreaFilled(false);
+
+        // 游戏存储按钮
+        JButton storeButton = new JButton("store");
+        storeButton.setForeground(Color.RED);
+        storeButton.setContentAreaFilled(false);
+
         // 继续按钮添加监听
         goOnButton.addActionListener(e -> {
             if (STATE == GameState.PAUSE) {
@@ -531,6 +537,16 @@ public class GameController extends JPanel implements Runnable {
                 STATE = GameState.PAUSE;
             }
         });
+
+        // 存储按钮添加监听
+        storeButton.addActionListener(e -> {
+            try {
+                storeData();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
         // 新建一个面板，把按钮和标签都加入到面板中间
         JPanel labelPanel = new JPanel();
         // 设置背景颜色为黑色
@@ -542,6 +558,8 @@ public class GameController extends JPanel implements Runnable {
         labelPanel.add(skillLabel);
         labelPanel.add(goOnButton);
         labelPanel.add(stopButton);
+        labelPanel.add(storeButton);
+
         // JPanel 面板添加这个面板
         this.add(labelPanel);
     }
@@ -661,14 +679,15 @@ public class GameController extends JPanel implements Runnable {
     public void storeData() throws IOException {
         // 保存当前有的葫芦娃、爷爷和妖精的属性即可
         // 序列化保存妖精一
-        FileOutputStream fileMonsterOne = new FileOutputStream("src/main/resources/monster_one.ser");
+        final String root = "src/main/resources/data/";
+        FileOutputStream fileMonsterOne = new FileOutputStream(root + "monster_one.ser");
         ObjectOutputStream outMonsterOne = new ObjectOutputStream(fileMonsterOne);
         for (MonsterOne monsterOne : monsterOneList) {
             outMonsterOne.writeObject(monsterOne);
         }
 
         // 序列化保存妖精二
-        FileOutputStream fileMonsterTwo = new FileOutputStream("src/main/resources/monster_two.ser");
+        FileOutputStream fileMonsterTwo = new FileOutputStream(root + "monster_two.ser");
         ObjectOutputStream outMonsterTwo = new ObjectOutputStream(fileMonsterTwo);
 
         for (MonsterTwo monsterTwo : monsterTwoList) {
@@ -676,7 +695,7 @@ public class GameController extends JPanel implements Runnable {
         }
 
         // 序列化保存妖精三
-        FileOutputStream fileMonsterThree = new FileOutputStream("src/main/resources/monster_three.ser");
+        FileOutputStream fileMonsterThree = new FileOutputStream(root + "monster_three.ser");
         ObjectOutputStream outMonsterThree = new ObjectOutputStream(fileMonsterThree);
 
         for (MonsterThree monsterThree : monsterThreeList) {
@@ -684,17 +703,17 @@ public class GameController extends JPanel implements Runnable {
         }
 
         // 序列化保存葫芦娃
-        FileOutputStream fileCalabash = new FileOutputStream("src/main/resources/calabash.ser");
+        FileOutputStream fileCalabash = new FileOutputStream(root + "calabash.ser");
         ObjectOutputStream outCalabash = new ObjectOutputStream(fileCalabash);
         outCalabash.writeObject(calabash);
 
         // 序列化保存爷爷
-        FileOutputStream fileGrandfather = new FileOutputStream("src/main/resources/grandfather.ser");
+        FileOutputStream fileGrandfather = new FileOutputStream(root + "grandfather.ser");
         ObjectOutputStream outGrandFather = new ObjectOutputStream(fileGrandfather);
         outGrandFather.writeObject(grandFather);
 
         // 序列化保存葫芦娃子弹
-        FileOutputStream fileCalabashBullet = new FileOutputStream("src/main/resources/calabash_bullet.ser");
+        FileOutputStream fileCalabashBullet = new FileOutputStream(root + "calabash_bullet.ser");
         ObjectOutputStream outCalabashBullet = new ObjectOutputStream(fileCalabashBullet);
 
         for (CalabashBullet bullet : calabashBulletList) {
@@ -702,11 +721,13 @@ public class GameController extends JPanel implements Runnable {
         }
 
         // 序列化保存妖精子弹
-        FileOutputStream fileMonsterBullet = new FileOutputStream("src/main/resources/monster_bullet.ser");
+        FileOutputStream fileMonsterBullet = new FileOutputStream(root + "monster_bullet.ser");
         ObjectOutputStream outMonsterBullet = new ObjectOutputStream(fileMonsterBullet);
 
         for (MonsterBullet bullet : monsterBulletList) {
             outMonsterBullet.writeObject(bullet);
         }
+
+        System.out.println("存储成功");
     }
 }
