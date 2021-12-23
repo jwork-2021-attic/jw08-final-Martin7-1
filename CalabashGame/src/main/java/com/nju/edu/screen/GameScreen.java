@@ -33,6 +33,7 @@ public class GameScreen extends JFrame {
         this.gameController.requestFocus();
         this.add(gameController, BorderLayout.CENTER);
 
+        System.out.println("[render] shutdown!");
         render.shutdown();
     }
 
