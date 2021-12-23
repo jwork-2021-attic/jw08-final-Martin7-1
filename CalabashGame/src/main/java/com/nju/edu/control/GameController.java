@@ -3,6 +3,7 @@ package com.nju.edu.control;
 import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.bullet.MonsterBullet;
 import com.nju.edu.screen.GameScreen;
+import com.nju.edu.screen.RenderThread;
 import com.nju.edu.sprite.*;
 import com.nju.edu.util.GameState;
 import com.nju.edu.util.ReadImage;
@@ -43,6 +44,12 @@ public class GameController extends JPanel implements Runnable {
      */
     private ExecutorService executor = Executors.newCachedThreadPool();
 
+    /**
+     * 用一个单独线程池来管理fps
+     */
+    private ExecutorService render = Executors.newSingleThreadExecutor();
+    private int fps;
+
     private JLabel scoreLabel;
     private JLabel HPLabel;
     /**
@@ -57,13 +64,13 @@ public class GameController extends JPanel implements Runnable {
     private List<MonsterThree> monsterThreeList;
     private List<MonsterBullet> monsterBulletList;
     private List<CalabashBullet> calabashBulletList;
-    // TODO
     private List<Blast> blastList;
 
     private boolean isExited = false;
     private CalabashThread calabashThread = new CalabashThread();
 
-    public GameController() {
+    public GameController(int fps) {
+        this.fps = fps;
         // 并发容器的使用
         // 线程安全的arrayList
         this.monsterOneList = new CopyOnWriteArrayList<>();
@@ -78,6 +85,7 @@ public class GameController extends JPanel implements Runnable {
 
         resetBoard();
 
+        this.render.execute(new RenderThread(this));
         executor.execute(calabashThread);
         executor.execute(new GrandfatherThread());
         executor.execute(new MonsterThread());
@@ -85,6 +93,10 @@ public class GameController extends JPanel implements Runnable {
         executor.execute(this);
 
         executor.shutdown();
+    }
+
+    public int getFps() {
+        return this.fps;
     }
 
     @Override
