@@ -1,5 +1,6 @@
 package com.nju.edu.sprite;
 
+import com.nju.edu.control.GameController;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.skill.CDSkill;
 import com.nju.edu.skill.MoveSkill;
@@ -34,7 +35,7 @@ public class GrandFather extends Sprite implements Serializable {
      * 给予技能的次数
      */
     private int giveTime = 0;
-    private Calabash calabash = Calabash.getInstance();
+    private Calabash calabash = GameScreen.getInstance().getGameController().getCalabash();
     private int speed = calabash.getSpeed();
 
     public void moveUp() {

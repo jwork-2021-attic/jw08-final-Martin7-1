@@ -507,7 +507,7 @@ public class GameController extends JPanel implements Runnable {
         this.addKeyListener(calabashThread);
 
         // 葫芦娃的初始位置
-        calabash = Calabash.getInstance();
+        calabash = new Calabash(100, 320);
         grandFather = GrandFather.getInstance();
 
         // 初始化一些Label
@@ -628,9 +628,10 @@ public class GameController extends JPanel implements Runnable {
         Font font = new Font("黑体", Font.PLAIN, 20);
         g.setColor(Color.WHITE);
         g.setFont(font);
-        g.drawString("按ENTER键开始游戏", 50, 450);
-        g.drawString("J:发射子弹", 50, 500);
-        g.drawString("X:使用技能", 50, 550);
+        g.drawString("按ENTER键开始游戏", 50, 400);
+        g.drawString("J:发射子弹", 50, 450);
+        g.drawString("X:使用技能", 50, 500);
+        g.drawString("L:加载存档", 50, 550);
         g.drawString("方向键:↑,↓,←,→", 50, 600);
         g.drawString("作者:Martin", 50, 650);
     }
@@ -836,5 +837,9 @@ public class GameController extends JPanel implements Runnable {
         inCalabashBullet.close();
         fileMonsterBullet.close();
         inMonsterBullet.close();
+    }
+
+    public Calabash getCalabash() {
+        return this.calabash;
     }
 }

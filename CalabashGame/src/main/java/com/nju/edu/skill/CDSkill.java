@@ -1,5 +1,6 @@
 package com.nju.edu.skill;
 
+import com.nju.edu.screen.GameScreen;
 import com.nju.edu.sprite.Calabash;
 
 /**
@@ -10,7 +11,7 @@ public class CDSkill implements Skill{
 
     private boolean haveSkill = false;
     private final SkillName name = SkillName.CD_SKILL;
-    private Calabash calabash = Calabash.getInstance();
+    private Calabash calabash = GameScreen.getInstance().getGameController().getCalabash();
 
     @Override
     public boolean isHaveSkill() {
