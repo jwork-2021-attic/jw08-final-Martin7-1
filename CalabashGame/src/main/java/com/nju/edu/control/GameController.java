@@ -3,6 +3,7 @@ package com.nju.edu.control;
 import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.bullet.MonsterBullet;
 import com.nju.edu.screen.GameScreen;
+import com.nju.edu.skill.SkillName;
 import com.nju.edu.sprite.*;
 import com.nju.edu.util.GameState;
 import com.nju.edu.util.ReadImage;
@@ -217,7 +218,7 @@ public class GameController extends JPanel implements Runnable {
 
 
         public CalabashThread() {
-            System.out.println("[CalabashThead]created");
+            System.out.println("[CalabashThead]created, name " + thread.getName());
             init();
         }
 
@@ -278,7 +279,7 @@ public class GameController extends JPanel implements Runnable {
                     calabash.useSkill();
                     // 只能够使用一次技能
                     calabash.setFirstUse();
-                    if ("RecoverSkill".equals(calabash.getCurSkill().getName())) {
+                    if (calabash.getCurSkill().getName() == SkillName.RECOVER_SKILL) {
                         // 更改血量的显示
                         HPLabel.setText("HP: " + calabash.getHP());
                     }
@@ -414,16 +415,16 @@ public class GameController extends JPanel implements Runnable {
             Random random = new Random();
             // 妖精一出现的时间
             if (time % MONSTER_ONE_APPEAR == 0) {
-                MonsterOne monsterOne = new MonsterOne(world, GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
+                MonsterOne monsterOne = new MonsterOne(world, world.getWidth(), random.nextInt(world.getHeight() - 2));
                 monsterOneList.add(monsterOne);
             }
             // 妖精二出现的时间
             if (time % MONSTER_TWO_APPEAR == 0) {
-                MonsterTwo monsterTwo = new MonsterTwo(world, GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
+                MonsterTwo monsterTwo = new MonsterTwo(world, world.getWidth(), random.nextInt(world.getHeight() - 2));
                 monsterTwoList.add(monsterTwo);
             }
             if (time % MONSTER_THREE_APPEAR == 0) {
-                MonsterThree monsterThree = new MonsterThree(world, GameScreen.getWid(), random.nextInt(GameScreen.getHei() - 200));
+                MonsterThree monsterThree = new MonsterThree(world, world.getWidth(), random.nextInt(world.getHeight() - 2));
                 monsterThreeList.add(monsterThree);
             }
         }
@@ -436,7 +437,7 @@ public class GameController extends JPanel implements Runnable {
 
         public GrandfatherThread() {
             // test
-            System.out.println("[GrandfatherThread]created");
+            System.out.println("[GrandfatherThread]created, name " + thread.getName());
         }
 
         @Override

@@ -10,7 +10,7 @@ import com.nju.edu.sprite.GrandFather;
 public class MoveSkill implements Skill {
 
     private boolean haveSkill = false;
-    private final String skillName = "MoveSkill";
+    private final SkillName name = SkillName.MOVE_SKILL;
     private Calabash calabash = Calabash.getInstance();
     private GrandFather grandFather = GrandFather.getInstance();
 
@@ -32,7 +32,7 @@ public class MoveSkill implements Skill {
     }
 
     @Override
-    public String getName() {
-        return this.skillName;
+    public SkillName getName() {
+        return this.name;
     }
 }

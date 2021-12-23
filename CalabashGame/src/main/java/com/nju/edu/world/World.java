@@ -11,6 +11,14 @@ public class World {
     public static final int WIDTH = GameScreen.getWid() / 50;
     public static final int HEIGHT = GameScreen.getHei() / 50;
 
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    public int getHeight() {
+        return HEIGHT;
+    }
+
     private static World theWorld;
 
     public static World getWorld() {
