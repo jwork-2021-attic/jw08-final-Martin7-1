@@ -85,8 +85,4 @@ public class GameScreen extends JFrame {
         return true;
     }
 
-    public GameController getGameController() {
-        return this.gameController;
-    }
-
 }

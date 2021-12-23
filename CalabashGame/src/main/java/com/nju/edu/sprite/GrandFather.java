@@ -35,7 +35,7 @@ public class GrandFather extends Sprite implements Serializable {
      * 给予技能的次数
      */
     private int giveTime = 0;
-    private Calabash calabash = GameScreen.getInstance().getGameController().getCalabash();
+    private Calabash calabash = Calabash.getInstance();
     private int speed = calabash.getSpeed();
 
     public void moveUp() {

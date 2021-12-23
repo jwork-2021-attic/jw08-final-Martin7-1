@@ -12,7 +12,7 @@ public class MoveSkill implements Skill {
 
     private boolean haveSkill = false;
     private final SkillName name = SkillName.MOVE_SKILL;
-    private Calabash calabash = GameScreen.getInstance().getGameController().getCalabash();
+    private Calabash calabash = Calabash.getInstance();
     private GrandFather grandFather = GrandFather.getInstance();
 
     @Override

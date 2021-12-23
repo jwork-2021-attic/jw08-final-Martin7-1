@@ -13,7 +13,12 @@ import java.io.Serializable;
  */
 public class Calabash extends Sprite implements Serializable {
 
+    private static final Calabash CALABASH = new Calabash(100, 320);
     private static final long serialVersionUID = -4970820453164850503L;
+
+    public static Calabash getInstance() {
+        return CALABASH;
+    }
 
     public transient Skill skill;
     private boolean isFirstUse = true;
@@ -23,12 +28,12 @@ public class Calabash extends Sprite implements Serializable {
     public int HP = 100;
     private int fireInterval = 120;
 
-    public Calabash(int x, int y) {
+    private Calabash(int x, int y) {
         super(x, y, 100, 100, ReadImage.Calabash);
         this.speed = 10;
     }
 
-    public Calabash(int x, int y, int speed) {
+    private Calabash(int x, int y, int speed) {
         super(x, y, 100, 100, ReadImage.Calabash);
         this.speed = speed;
     }

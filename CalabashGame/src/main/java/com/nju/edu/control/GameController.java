@@ -94,6 +94,7 @@ public class GameController extends JPanel implements Runnable {
         executor.execute(this);
 
         executor.shutdown();
+        render.shutdown();
     }
 
     public int getFps() {
@@ -507,7 +508,7 @@ public class GameController extends JPanel implements Runnable {
         this.addKeyListener(calabashThread);
 
         // 葫芦娃的初始位置
-        calabash = new Calabash(100, 320);
+        calabash = Calabash.getInstance();
         grandFather = GrandFather.getInstance();
 
         // 初始化一些Label

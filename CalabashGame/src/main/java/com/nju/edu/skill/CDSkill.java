@@ -11,7 +11,7 @@ public class CDSkill implements Skill{
 
     private boolean haveSkill = false;
     private final SkillName name = SkillName.CD_SKILL;
-    private Calabash calabash = GameScreen.getInstance().getGameController().getCalabash();
+    private Calabash calabash = Calabash.getInstance();
 
     @Override
     public boolean isHaveSkill() {
