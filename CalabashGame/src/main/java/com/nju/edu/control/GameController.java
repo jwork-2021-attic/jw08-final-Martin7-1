@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -646,8 +646,55 @@ public class GameController extends JPanel implements Runnable {
     /**
      * 保存当前游戏的数据
      */
-    public void storeData() {
+    public void storeData() throws IOException {
         // 保存当前有的葫芦娃、爷爷和妖精的属性即可
-        // try (FileInputStream fileOut = new FileInputStream("resources/"))
+        // 序列化保存妖精一
+        FileOutputStream fileMonsterOne = new FileOutputStream("src/main/resources/monster_one.ser");
+        ObjectOutputStream outMonsterOne = new ObjectOutputStream(fileMonsterOne);
+        for (MonsterOne monsterOne : monsterOneList) {
+            outMonsterOne.writeObject(monsterOne);
+        }
+
+        // 序列化保存妖精二
+        FileOutputStream fileMonsterTwo = new FileOutputStream("src/main/resources/monster_two.ser");
+        ObjectOutputStream outMonsterTwo = new ObjectOutputStream(fileMonsterTwo);
+
+        for (MonsterTwo monsterTwo : monsterTwoList) {
+            outMonsterTwo.writeObject(monsterTwo);
+        }
+
+        // 序列化保存妖精三
+        FileOutputStream fileMonsterThree = new FileOutputStream("src/main/resources/monster_three.ser");
+        ObjectOutputStream outMonsterThree = new ObjectOutputStream(fileMonsterThree);
+
+        for (MonsterThree monsterThree : monsterThreeList) {
+            outMonsterThree.writeObject(monsterThree);
+        }
+
+        // 序列化保存葫芦娃
+        FileOutputStream fileCalabash = new FileOutputStream("src/main/resources/calabash.ser");
+        ObjectOutputStream outCalabash = new ObjectOutputStream(fileCalabash);
+        outCalabash.writeObject(calabash);
+
+        // 序列化保存爷爷
+        FileOutputStream fileGrandfather = new FileOutputStream("src/main/resources/grandfather.ser");
+        ObjectOutputStream outGrandFather = new ObjectOutputStream(fileGrandfather);
+        outGrandFather.writeObject(grandFather);
+
+        // 序列化保存葫芦娃子弹
+        FileOutputStream fileCalabashBullet = new FileOutputStream("src/main/resources/calabash_bullet.ser");
+        ObjectOutputStream outCalabashBullet = new ObjectOutputStream(fileCalabashBullet);
+
+        for (CalabashBullet bullet : calabashBulletList) {
+            outCalabashBullet.writeObject(bullet);
+        }
+
+        // 序列化保存妖精子弹
+        FileOutputStream fileMonsterBullet = new FileOutputStream("src/main/resources/monster_bullet.ser");
+        ObjectOutputStream outMonsterBullet = new ObjectOutputStream(fileMonsterBullet);
+
+        for (MonsterBullet bullet : monsterBulletList) {
+            outMonsterBullet.writeObject(bullet);
+        }
     }
 }
