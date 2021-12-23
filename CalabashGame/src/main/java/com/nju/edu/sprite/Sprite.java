@@ -10,6 +10,10 @@ public class Sprite extends GameObject {
 
     protected int speed = 1;
 
+    public Sprite() {
+
+    }
+
     public Sprite(int x, int y, int width, int height, BufferedImage image) {
         super(x, y, width, height, image);
     }

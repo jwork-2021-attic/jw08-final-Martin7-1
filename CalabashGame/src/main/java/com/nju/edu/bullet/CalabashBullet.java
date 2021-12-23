@@ -19,6 +19,10 @@ public class CalabashBullet extends Sprite implements Serializable {
         this.speed = 10;
     }
 
+    public CalabashBullet() {
+
+    }
+
     @Override
     public void move(long time) {
         // 每隔一段时间移动

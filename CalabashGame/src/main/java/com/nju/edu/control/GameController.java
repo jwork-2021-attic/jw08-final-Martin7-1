@@ -770,28 +770,28 @@ public class GameController extends JPanel implements Runnable {
         FileInputStream fileMonsterOne = new FileInputStream(root + "monster_one.ser");
         ObjectInputStream inMonsterOne = new ObjectInputStream(fileMonsterOne);
 
-        MonsterOne monsterOne = (MonsterOne) inMonsterOne.readObject();
-        while (monsterOne != null) {
-            this.monsterOneList.add(monsterOne);
+        MonsterOne monsterOne;
+        while (inMonsterOne.available() > 0) {
             monsterOne = (MonsterOne) inMonsterOne.readObject();
+            this.monsterOneList.add(monsterOne);
         }
 
         FileInputStream fileMonsterTwo = new FileInputStream(root + "monster_two.ser");
         ObjectInputStream inMonsterTwo = new ObjectInputStream(fileMonsterTwo);
 
-        MonsterTwo monsterTwo = (MonsterTwo) inMonsterTwo.readObject();
-        while (monsterTwo != null) {
-            this.monsterTwoList.add(monsterTwo);
+        MonsterTwo monsterTwo;
+        while (inMonsterTwo.available() > 0) {
             monsterTwo = (MonsterTwo) inMonsterTwo.readObject();
+            this.monsterTwoList.add(monsterTwo);
         }
 
         FileInputStream fileMonsterThree = new FileInputStream(root + "monster_three.ser");
         ObjectInputStream inMonsterThree = new ObjectInputStream(fileMonsterThree);
 
-        MonsterThree monsterThree = (MonsterThree) inMonsterThree.readObject();
-        while (monsterThree != null) {
-            this.monsterThreeList.add(monsterThree);
+        MonsterThree monsterThree;
+        while (inMonsterThree.available() > 0) {
             monsterThree = (MonsterThree) inMonsterThree.readObject();
+            this.monsterThreeList.add(monsterThree);
         }
 
         FileInputStream fileCalabash = new FileInputStream(root + "calabash.ser");
@@ -806,19 +806,19 @@ public class GameController extends JPanel implements Runnable {
         FileInputStream fileCalabashBullet = new FileInputStream(root + "calabash_bullet.ser");
         ObjectInputStream inCalabashBullet = new ObjectInputStream(fileCalabashBullet);
 
-        CalabashBullet calabashBullet = (CalabashBullet) inCalabashBullet.readObject();
-        while (calabashBullet != null) {
-            this.calabashBulletList.add(calabashBullet);
+        CalabashBullet calabashBullet;
+        while (inCalabashBullet.available() > 0) {
             calabashBullet = (CalabashBullet) inCalabashBullet.readObject();
+            this.calabashBulletList.add(calabashBullet);
         }
 
         FileInputStream fileMonsterBullet = new FileInputStream(root + "monster_bullet.ser");
         ObjectInputStream inMonsterBullet = new ObjectInputStream(fileMonsterBullet);
 
-        MonsterBullet monsterBullet = (MonsterBullet) inMonsterBullet.readObject();
-        while (monsterBullet != null) {
-            this.monsterBulletList.add(monsterBullet);
+        MonsterBullet monsterBullet;
+        while (inMonsterBullet.available() > 0) {
             monsterBullet = (MonsterBullet) inMonsterBullet.readObject();
+            this.monsterBulletList.add(monsterBullet);
         }
 
         System.out.println("load succeed!");

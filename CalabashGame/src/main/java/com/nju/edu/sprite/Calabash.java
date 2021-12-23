@@ -38,6 +38,10 @@ public class Calabash extends Sprite implements Serializable {
         this.speed = speed;
     }
 
+    public Calabash() {
+        // serializable
+    }
+
     public void moveUp() {
         if (this.y - speed >= 0) {
             this.y -= speed;

@@ -12,6 +12,10 @@ public class MonsterThree extends Sprite implements Monster, Serializable {
 
     private static final long serialVersionUID = 3424717620188168556L;
 
+    public MonsterThree() {
+
+    }
+
     public MonsterThree(int x, int y) {
         super(x, y, 150, 150, ReadImage.MonsterThree);
         this.speed = 2;

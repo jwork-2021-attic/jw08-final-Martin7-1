@@ -29,6 +29,10 @@ public abstract class GameObject {
      */
     BufferedImage image;
 
+    public GameObject() {
+
+    }
+
     public GameObject(int x, int y, int width, int height, BufferedImage image) {
         this.x = x;
         this.y = y;

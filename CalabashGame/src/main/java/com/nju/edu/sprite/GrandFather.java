@@ -26,6 +26,10 @@ public class GrandFather extends Sprite implements Serializable {
         super(x, y, 100, 100, ReadImage.GrandFather);
     }
 
+    public GrandFather() {
+        // serializable
+    }
+
     /**
      * 给予技能的次数
      */
