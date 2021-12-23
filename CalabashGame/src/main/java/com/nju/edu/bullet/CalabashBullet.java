@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class CalabashBullet extends Sprite implements Serializable {
 
+    private static final long serialVersionUID = 511470914476822150L;
     private final int interval = 20;
     private int speed;
 

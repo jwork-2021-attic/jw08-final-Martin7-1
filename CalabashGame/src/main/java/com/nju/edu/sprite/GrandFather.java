@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class GrandFather extends Sprite implements Serializable {
 
     private static final GrandFather GRAND_FATHER = new GrandFather(0, 320);
+    private static final long serialVersionUID = -4820690048859461999L;
 
     public static GrandFather getInstance() {
         return GRAND_FATHER;

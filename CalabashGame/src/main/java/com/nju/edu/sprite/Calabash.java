@@ -3,6 +3,7 @@ package com.nju.edu.sprite;
 import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.skill.Skill;
+import com.nju.edu.skill.SkillName;
 import com.nju.edu.util.ReadImage;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 public class Calabash extends Sprite implements Serializable {
 
     private static final Calabash CALABASH = new Calabash(100, 320);
+    private static final long serialVersionUID = -4970820453164850503L;
 
     public static Calabash getInstance() {
         return CALABASH;
@@ -137,11 +139,11 @@ public class Calabash extends Sprite implements Serializable {
     public void clearSkillImpact() {
         // 根据当前技能来清空技能效果
         if (this.skill != null) {
-            if ("MoveSkill".equals(this.skill.getName()) && this.speed == 15) {
+            if (this.skill.getName() == SkillName.MOVE_SKILL && this.speed == 15) {
                 speedDown();
-            } else if ("CDSkill".equals(this.skill.getName()) && this.fireInterval == 80) {
+            } else if (this.skill.getName() == SkillName.CD_SKILL && this.fireInterval == 80) {
                 this.fireInterval = 120;
-            } else {
+            } else if (this.skill.getName() == SkillName.RECOVER_SKILL) {
                 // nothing to do, recover do not need to reset
             }
         }

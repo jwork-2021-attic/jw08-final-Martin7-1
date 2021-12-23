@@ -4,6 +4,7 @@ import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.bullet.MonsterBullet;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.screen.RenderThread;
+import com.nju.edu.skill.SkillName;
 import com.nju.edu.sprite.*;
 import com.nju.edu.util.GameState;
 import com.nju.edu.util.ReadImage;
@@ -290,10 +291,21 @@ public class GameController extends JPanel implements Runnable {
                     calabash.useSkill();
                     // 只能够使用一次技能
                     calabash.setFirstUse();
-                    if ("RecoverSkill".equals(calabash.getCurSkill().getName())) {
+                    if (calabash.getCurSkill().getName() == SkillName.RECOVER_SKILL) {
                         // 更改血量的显示
                         HPLabel.setText("HP: " + calabash.getHP());
                     }
+                }
+            } else if (getKeyDown(KeyEvent.VK_L)) {
+                try {
+                    loadData();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                if (GameController.STATE == GameState.START) {
+                    STATE = GameState.RUNNING;
+                } else if (GameController.STATE == GameState.GAME_OVER) {
+                    STATE = GameState.RUNNING;
                 }
             }
         }
@@ -675,6 +687,7 @@ public class GameController extends JPanel implements Runnable {
 
     /**
      * 保存当前游戏的数据
+     * @throws IOException IO异常
      */
     public void storeData() throws IOException {
         // 保存当前有的葫芦娃、爷爷和妖精的属性即可
@@ -729,5 +742,99 @@ public class GameController extends JPanel implements Runnable {
         }
 
         System.out.println("存储成功");
+        fileMonsterOne.close();
+        outMonsterOne.close();
+        fileMonsterTwo.close();
+        outMonsterTwo.close();
+        fileMonsterThree.close();
+        outMonsterThree.close();
+
+        fileCalabash.close();
+        outCalabash.close();
+        fileGrandfather.close();
+        outGrandFather.close();
+        fileCalabashBullet.close();
+        outCalabashBullet.close();
+        fileMonsterBullet.close();
+        outMonsterBullet.close();
+    }
+
+    /**
+     * 加载数据
+     * @throws IOException IO异常
+     * @throws ClassNotFoundException 找不到该类型异常
+     */
+    public void loadData() throws IOException, ClassNotFoundException {
+        // 读取文件
+        final String root = "src/main/resources/data/";
+        FileInputStream fileMonsterOne = new FileInputStream(root + "monster_one.ser");
+        ObjectInputStream inMonsterOne = new ObjectInputStream(fileMonsterOne);
+
+        MonsterOne monsterOne = (MonsterOne) inMonsterOne.readObject();
+        while (monsterOne != null) {
+            this.monsterOneList.add(monsterOne);
+            monsterOne = (MonsterOne) inMonsterOne.readObject();
+        }
+
+        FileInputStream fileMonsterTwo = new FileInputStream(root + "monster_two.ser");
+        ObjectInputStream inMonsterTwo = new ObjectInputStream(fileMonsterTwo);
+
+        MonsterTwo monsterTwo = (MonsterTwo) inMonsterTwo.readObject();
+        while (monsterTwo != null) {
+            this.monsterTwoList.add(monsterTwo);
+            monsterTwo = (MonsterTwo) inMonsterTwo.readObject();
+        }
+
+        FileInputStream fileMonsterThree = new FileInputStream(root + "monster_three.ser");
+        ObjectInputStream inMonsterThree = new ObjectInputStream(fileMonsterThree);
+
+        MonsterThree monsterThree = (MonsterThree) inMonsterThree.readObject();
+        while (monsterThree != null) {
+            this.monsterThreeList.add(monsterThree);
+            monsterThree = (MonsterThree) inMonsterThree.readObject();
+        }
+
+        FileInputStream fileCalabash = new FileInputStream(root + "calabash.ser");
+        ObjectInputStream inCalabash = new ObjectInputStream(fileCalabash);
+        this.calabash = (Calabash) inCalabash.readObject();
+
+        FileInputStream fileGrandfather = new FileInputStream(root + "grandfather.ser");
+        ObjectInputStream inGrandfather = new ObjectInputStream(fileGrandfather);
+        this.grandFather = (GrandFather) inGrandfather.readObject();
+
+        // 读取子弹
+        FileInputStream fileCalabashBullet = new FileInputStream(root + "calabash_bullet.ser");
+        ObjectInputStream inCalabashBullet = new ObjectInputStream(fileCalabashBullet);
+
+        CalabashBullet calabashBullet = (CalabashBullet) inCalabashBullet.readObject();
+        while (calabashBullet != null) {
+            this.calabashBulletList.add(calabashBullet);
+            calabashBullet = (CalabashBullet) inCalabashBullet.readObject();
+        }
+
+        FileInputStream fileMonsterBullet = new FileInputStream(root + "monster_bullet.ser");
+        ObjectInputStream inMonsterBullet = new ObjectInputStream(fileMonsterBullet);
+
+        MonsterBullet monsterBullet = (MonsterBullet) inMonsterBullet.readObject();
+        while (monsterBullet != null) {
+            this.monsterBulletList.add(monsterBullet);
+            monsterBullet = (MonsterBullet) inMonsterBullet.readObject();
+        }
+
+        System.out.println("load succeed!");
+        fileMonsterOne.close();
+        inMonsterOne.close();
+        fileMonsterTwo.close();
+        inMonsterTwo.close();
+        fileMonsterThree.close();
+        inMonsterThree.close();
+        fileCalabash.close();
+        inCalabash.close();
+        fileGrandfather.close();
+        inGrandfather.close();
+        fileCalabashBullet.close();
+        inCalabashBullet.close();
+        fileMonsterBullet.close();
+        inMonsterBullet.close();
     }
 }

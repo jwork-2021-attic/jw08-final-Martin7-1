@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class MonsterBullet extends Sprite implements Serializable {
 
+    private static final long serialVersionUID = -8384360283341110034L;
     private final int interval = 20;
     private int speed;
 

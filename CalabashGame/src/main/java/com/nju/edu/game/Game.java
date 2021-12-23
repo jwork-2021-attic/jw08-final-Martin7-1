@@ -1,6 +1,6 @@
 package com.nju.edu.game;
 
-import com.nju.edu.screen.StartScreen;
+import com.nju.edu.screen.GameScreen;
 
 import java.awt.*;
 
@@ -10,6 +10,6 @@ import java.awt.*;
 public class Game {
 
     public static void start() {
-        StartScreen gameScreen = new StartScreen();
+        GameScreen gameScreen = new GameScreen("Calabash Game", 30, Color.WHITE);
     }
 }

@@ -10,6 +10,8 @@ import java.io.Serializable;
  */
 public class MonsterOne extends Sprite implements Monster, Serializable {
 
+    private static final long serialVersionUID = 4531157429822834022L;
+
     public MonsterOne(int x, int y) {
         super(x, y, 100, 100, ReadImage.MonsterOne);
         this.speed = 6;

@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 public class MonsterTwo extends Sprite implements Monster, Serializable {
 
+    private static final long serialVersionUID = -7012375325311897529L;
     private boolean isGoAhead = true;
 
     public MonsterTwo(int x, int y) {
