@@ -2,6 +2,8 @@ package com.nju.edu.server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -9,7 +11,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * @author Zyi
@@ -94,7 +95,18 @@ public class Server {
      * @throws IOException IO异常
      */
     private void accept(SelectionKey key) throws IOException {
+        ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
+        SocketChannel channel = serverChannel.accept();
+        channel.configureBlocking(false);
+        Socket socket = channel.socket();
+        SocketAddress remoteAddr = socket.getRemoteSocketAddress();
+        System.out.println("Connected to: " + remoteAddr);
 
+        /*
+         * Register channel with selector for further IO (record it for read/write
+         * operations, here we have used read operation)
+         */
+        channel.register(this.selector, SelectionKey.OP_READ);
     }
 
     /**
@@ -103,7 +115,7 @@ public class Server {
      * @throws IOException IO异常
      */
     private void read(SelectionKey key) throws IOException {
-
+        // TODO
     }
 
     /**
@@ -112,7 +124,7 @@ public class Server {
      * @throws IOException IO异常
      */
     private void write(SelectionKey key) throws IOException {
-
+        // TODO
     }
 
     public static void main(String[] args) {
