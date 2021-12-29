@@ -66,11 +66,9 @@ public class Server {
                 if (key.isAcceptable()) {
                     this.accept(key);
                     System.out.println("用户连接成功");
-                    channel.register(this.selector, SelectionKey.OP_READ);
-                }
-                if (key.isReadable()) {
+                } else if (key.isReadable()) {
                     byte[] bytes = this.read(key);
-                    ByteBuffer buffer = ByteBuffer.allocate(1024);
+                    ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
                     // 向所有客户端发送读到的数据
                     // 这里的数据我们只需要
                     for (SocketChannel socketChannel : socketChannels) {
@@ -79,12 +77,8 @@ public class Server {
                         socketChannel.write(buffer);
                         buffer.clear();
                     }
-                    // channel.register(this.selector, SelectionKey.OP_WRITE);
-                }
-                if (key.isWritable()) {
-                    // 暂时不需要服务端向客户端写数据
-                    this.write(key);
-                    // channel.register(this.selector, SelectionKey.OP_READ);
+                } else if (key.isWritable()) {
+                    // TODO
                 }
             }
             it.remove();
@@ -103,6 +97,7 @@ public class Server {
         Socket socket = channel.socket();
         SocketAddress remoteAddr = socket.getRemoteSocketAddress();
         System.out.println("Connected to: " + remoteAddr);
+        channel.register(this.selector, SelectionKey.OP_READ);
     }
 
     /**
@@ -127,13 +122,14 @@ public class Server {
 
         byte[] data = new byte[numRead];
         System.arraycopy(buffer.array(), 0, data, 0, numRead);
-        System.out.println("Got: " + new String(data));
+        channel.register(this.selector, SelectionKey.OP_WRITE);
 
         return data;
     }
 
     /**
      * write to client
+     * maybe not need
      * @param key selector key
      * @throws IOException IO异常
      */

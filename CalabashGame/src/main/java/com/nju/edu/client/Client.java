@@ -48,11 +48,10 @@ public class Client {
     }
 
     private void send() throws IOException {
-        // 需要输送到服务器端的位置
-        // 当前葫芦娃的位置
-        // 把葫芦娃传送上去即可
+        // 需要输送到服务器端的消息
+        // 包括游戏中的所有物体
         Calabash calabash = gameController.getCalabash();
-        ByteBuffer buffer = ByteBuffer.allocate(10240);
+        ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
         // 对calabash进行序列化
         buffer.put(SerializationUtils.serialize(calabash));
         buffer.flip();
@@ -65,7 +64,7 @@ public class Client {
     private void read() throws IOException {
         // 需要从服务器端读取的数据:
         // 葫芦娃的位置，小怪的位置和子弹的位置
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
         int numRead = -1;
         numRead = clientChannel.read(buffer);
 

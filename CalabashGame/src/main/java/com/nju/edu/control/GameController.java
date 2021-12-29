@@ -887,4 +887,32 @@ public class GameController extends JPanel implements Runnable {
     public Calabash getCalabash() {
         return this.calabash;
     }
+
+    public void setCalabash(Calabash calabash) {
+        this.calabash = calabash;
+    }
+
+    public List<MonsterOne> getMonsterOneList() {
+        return monsterOneList;
+    }
+
+    public List<MonsterTwo> getMonsterTwoList() {
+        return monsterTwoList;
+    }
+
+    public List<MonsterThree> getMonsterThreeList() {
+        return monsterThreeList;
+    }
+
+    public List<CalabashBullet> getCalabashBulletList() {
+        return calabashBulletList;
+    }
+
+    public List<MonsterBullet> getMonsterBulletList() {
+        return monsterBulletList;
+    }
+
+    public GrandFather getGrandFather() {
+        return grandFather;
+    }
 }
