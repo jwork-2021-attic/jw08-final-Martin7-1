@@ -14,7 +14,7 @@ public class Game {
         GameScreen gameScreen = new GameScreen("Calabash Game", Color.WHITE);
         GameController gameController = new GameController(30);
         gameScreen.add(gameController);
-        gameController.startGame();
+        gameController.start();
         gameController.requestFocus();
     }
 }

@@ -73,20 +73,27 @@ public class GameController extends JPanel implements Runnable {
     private MonsterThread monsterThread;
     private TimeControl timeControl;
 
-    GrandFatherMouseAdapter adapter;
+    private GrandFatherMouseAdapter adapter;
+
+    public void start() {
+        calabash = Calabash.getInstance();
+        grandFather = GrandFather.getInstance();
+        resetBoard();
+        executePool();
+    }
 
     /**
      * 直接开始游戏
      */
-    public void startGame() {
-        this.addKeyListener(calabashThread);
-        this.addMouseListener(adapter);
-        this.addMouseMotionListener(adapter);
-        this.requestFocus();
-
+    private void startGame() {
+        calabash = Calabash.getInstance();
+        grandFather = GrandFather.getInstance();
         resetBoard();
+        executePool();
+    }
 
-        this.render.execute(new RenderThread(this));
+    private void executePool() {
+        render.execute(new RenderThread(this));
         executor.execute(calabashThread);
         executor.execute(grandfatherThread);
         executor.execute(monsterThread);
@@ -100,8 +107,11 @@ public class GameController extends JPanel implements Runnable {
     /**
      * 加载存储好的游戏
      */
-    public void loadGame() {
-        // TODO
+    private void loadGame() throws IOException, ClassNotFoundException {
+        loadData();
+        // 强制repaint一次
+        resetBoard();
+        executePool();
     }
 
     public GameController(int fps) {
@@ -302,6 +312,7 @@ public class GameController extends JPanel implements Runnable {
             } else if (getKeyDown(KeyEvent.VK_ENTER)) {
                 if (GameController.STATE == GameState.START) {
                     STATE = GameState.RUNNING;
+                    // startGame();
                 } else if (GameController.STATE == GameState.GAME_OVER) {
                     STATE = GameState.RUNNING;
                     restart();
@@ -536,10 +547,9 @@ public class GameController extends JPanel implements Runnable {
         // 清空JPanel里的所有内容
         this.removeAll();
         this.addKeyListener(calabashThread);
-
-        // 葫芦娃的初始位置
-        calabash = Calabash.getInstance();
-        grandFather = GrandFather.getInstance();
+        this.addMouseListener(adapter);
+        this.addMouseMotionListener(adapter);
+        this.requestFocus();
 
         // 初始化一些Label
         scoreLabel = new JLabel("Score: " + this.score);

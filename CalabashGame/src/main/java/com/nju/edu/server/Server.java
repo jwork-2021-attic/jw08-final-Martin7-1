@@ -5,10 +5,7 @@ import com.nju.edu.screen.GameScreen;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -74,26 +71,13 @@ public class Server {
                 }
                 if (key.isAcceptable()) {
                     this.accept(key);
-                    SocketChannel sc = channel.accept();
-                    sc.configureBlocking(false);
-                    sc.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-                    // handler.channelQueueHashMap.put(sc,new ConcurrentLinkedDeque<>());
                     System.out.println("用户连接成功");
                 }
                 if (key.isReadable()) {
                     this.read(key);
-                    SocketChannel sc = (SocketChannel) key.channel();
-                    ByteBuffer buffer = ByteBuffer.allocate(1024);
-                    int count = sc.read(buffer);
-                    buffer.flip();
-                    // handler.handle(sc,buffer);
-                    sc.register(selector,  SelectionKey.OP_WRITE);
                 }
                 if (key.isWritable()) {
                     this.write(key);
-                    SocketChannel sc = (SocketChannel) key.channel();
-                    // handler.write(sc);
-                    sc.register(selector, SelectionKey.OP_READ);
                 }
             }
             it.remove();
@@ -128,14 +112,23 @@ public class Server {
     private void read(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
         Socket socket = channel.socket();
-        ObjectInputStream objectInputStream;
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        buffer.clear();
 
         try {
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
-            while (true) {
-                System.out.println(objectInputStream.readObject());
+            int count = channel.read(buffer);
+            if (count > 0) {
+                ByteArrayInputStream input = new ByteArrayInputStream(buffer.array());
+                ObjectInputStream objectInputStream = new ObjectInputStream(input);
+
+                Object obj = objectInputStream.readObject();
+                // TODO: decode the object
+            } else if (count == -1) {
+                System.out.println("客户端已经断开连接");
+                socket.close();
             }
         } catch (ClassNotFoundException e) {
+            System.out.println("客户端已经断开连接");
             e.printStackTrace();
         } finally {
             socket.close();
@@ -155,21 +148,18 @@ public class Server {
 
 
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-        Scanner scanner = new Scanner(new InputStreamReader(System.in));
 
-        while (true) {
-            GameScreen gameScreen = new GameScreen("Calabash Game", Color.WHITE);
-            GameController gameController = new GameController(30);
-            gameScreen.add(gameController);
-            gameController.startGame();
-            gameScreen.setVisible(true);
+        GameScreen gameScreen = new GameScreen("Calabash Game", Color.WHITE);
+        GameController gameController = new GameController(30);
+        gameScreen.add(gameController);
+        gameController.start();
+        gameScreen.setVisible(true);
 
-            int score = gameController.getScore();
-            JSONObject object = new JSONObject();
-            object.put("score:", score);
-            objectOutputStream.writeObject(object);
-            objectOutputStream.flush();
-        }
+        int score = gameController.getScore();
+        JSONObject object = new JSONObject();
+        object.put("score:", score);
+        objectOutputStream.writeObject(object);
+        objectOutputStream.flush();
 
         // channel.register(this.selector, SelectionKey.OP_READ);
     }

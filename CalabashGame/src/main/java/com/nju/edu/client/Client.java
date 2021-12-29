@@ -95,7 +95,7 @@ class ClientSend implements Runnable {
             //创建面板对象：调用面板的构造方法，制作面板
             GameController panel =new GameController(30);
             //调用启动游戏的方法
-            panel.startGame();
+            panel.start();
             //将面板加入到窗体中
             frame.add(panel);
             //显示窗体 true 显示， false 隐藏
