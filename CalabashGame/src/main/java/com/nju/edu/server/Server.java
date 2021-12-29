@@ -2,6 +2,7 @@ package com.nju.edu.server;
 
 import com.nju.edu.control.GameController;
 import com.nju.edu.screen.GameScreen;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Server {
 
     private ServerSocketChannel channel;
     private Selector selector;
+    private SelectionKey mainKey;
 
     // private Handler handler;
 
@@ -45,8 +47,9 @@ public class Server {
     private void bind() throws IOException {
         channel = ServerSocketChannel.open();
         // bind server socket channel to port
-        channel.socket().bind(new InetSocketAddress(ADDRESS, PORT));
+        // 非阻塞模式的设置必须在设置端口前完成
         channel.configureBlocking(false);
+        channel.socket().bind(new InetSocketAddress(ADDRESS, PORT));
         // 连接selector
         channel.register(selector, SelectionKey.OP_ACCEPT);
 
@@ -137,6 +140,8 @@ public class Server {
         } finally {
             socket.close();
         }
+
+        channel.register(this.selector, SelectionKey.OP_WRITE);
     }
 
     /**
@@ -158,7 +163,15 @@ public class Server {
             gameScreen.add(gameController);
             gameController.startGame();
             gameScreen.setVisible(true);
+
+            int score = gameController.getScore();
+            JSONObject object = new JSONObject();
+            object.put("score:", score);
+            objectOutputStream.writeObject(object);
+            objectOutputStream.flush();
         }
+
+        // channel.register(this.selector, SelectionKey.OP_READ);
     }
 
     public static void main(String[] args) {

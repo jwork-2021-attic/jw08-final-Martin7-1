@@ -870,7 +870,7 @@ public class GameController extends JPanel implements Runnable {
         inMonsterBullet.close();
     }
 
-    public Calabash getCalabash() {
-        return this.calabash;
+    public int getScore() {
+        return this.score;
     }
 }
