@@ -6,8 +6,6 @@ import com.nju.edu.skill.Skill;
 import com.nju.edu.skill.SkillName;
 import com.nju.edu.util.ReadImage;
 
-import java.io.ObjectInputStream;
-
 /**
  * @author Zyi
  */
@@ -15,6 +13,7 @@ public class Calabash extends Sprite {
 
     private static final Calabash CALABASH = new Calabash(100, 320);
     private static final long serialVersionUID = -4970820453164850503L;
+    public Integer ID;
 
     public static Calabash getInstance() {
         return CALABASH;
@@ -160,5 +159,9 @@ public class Calabash extends Sprite {
 
     public void setFireInterval(int fireInterval) {
         this.fireInterval = fireInterval;
+    }
+
+    public void setID(int id) {
+        this.ID = id;
     }
 }

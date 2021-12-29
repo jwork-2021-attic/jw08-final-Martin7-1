@@ -73,8 +73,6 @@ public class GameController extends JPanel implements Runnable {
     private MonsterThread monsterThread;
     private TimeControl timeControl;
 
-    private GrandFatherMouseAdapter adapter;
-
     public void start() {
         calabash = Calabash.getInstance();
         grandFather = GrandFather.getInstance();
@@ -125,7 +123,6 @@ public class GameController extends JPanel implements Runnable {
         this.calabashBulletList = new CopyOnWriteArrayList<>();
         this.blastList = new CopyOnWriteArrayList<>();
         calabashThread = new CalabashThread();
-        adapter = new GrandFatherMouseAdapter();
         grandfatherThread = new GrandfatherThread();
         monsterThread = new MonsterThread();
         timeControl = new TimeControl();
@@ -291,18 +288,22 @@ public class GameController extends JPanel implements Runnable {
                 // 向上走y值减小
                 // 判断会不会走出边界
                 calabash.moveUp();
+                grandFather.moveUp();
             } else if (getKeyDown(KeyEvent.VK_S) || getKeyDown(KeyEvent.VK_DOWN)) {
                 // 向下走y值增大
                 // 判断会不会走出边界
                 calabash.moveDown();
+                grandFather.moveDown();
             } else if (getKeyDown(KeyEvent.VK_A) || getKeyDown(KeyEvent.VK_LEFT)) {
                 // 向左走x值减小
                 // 判断会不会走出边界
                 calabash.moveLeft();
+                grandFather.moveLeft();
             } else if (getKeyDown(KeyEvent.VK_D) || getKeyDown(KeyEvent.VK_RIGHT)) {
                 // 向右走x值增大
                 // 判断会不会走出边界
                 calabash.moveRight();
+                grandFather.moveRight();
             } else if (getKeyDown(KeyEvent.VK_J)) {
                 // 按j发射子弹
                 CalabashBullet bullet = calabash.calabashFire();
@@ -547,8 +548,6 @@ public class GameController extends JPanel implements Runnable {
         // 清空JPanel里的所有内容
         this.removeAll();
         this.addKeyListener(calabashThread);
-        this.addMouseListener(adapter);
-        this.addMouseMotionListener(adapter);
         this.requestFocus();
 
         // 初始化一些Label
@@ -888,9 +887,7 @@ public class GameController extends JPanel implements Runnable {
         return this.calabash;
     }
 
-    public void setCalabash(Calabash calabash) {
-        this.calabash = calabash;
-    }
+
 
     public List<MonsterOne> getMonsterOneList() {
         return monsterOneList;

@@ -70,7 +70,6 @@ public class Server {
                     byte[] bytes = this.read(key);
                     ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
                     // 向所有客户端发送读到的数据
-                    // 这里的数据我们只需要
                     for (SocketChannel socketChannel : socketChannels) {
                         buffer.put(bytes);
                         buffer.flip();

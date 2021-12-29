@@ -74,7 +74,8 @@ public class Client {
 
         // 反序列化
         Calabash calabash = SerializationUtils.deserialize(buffer.array());
-        // 将该客户端的葫芦娃更新
+        // 将其加入本地的游戏窗口中
+        // gameController.addCalabash(calabash);
     }
 
     public static void main(String[] args) {
