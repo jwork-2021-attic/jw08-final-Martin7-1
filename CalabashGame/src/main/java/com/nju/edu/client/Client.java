@@ -3,7 +3,7 @@ package com.nju.edu.client;
 import com.nju.edu.control.GameController;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.sprite.Calabash;
-import com.nju.edu.util.GameState;
+import com.nju.edu.util.MessageHelper;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.awt.*;
@@ -39,24 +39,46 @@ public class Client {
         System.out.println("Client... started");
 
         // 发送消息到服务器端
-        send();
-        while (GameController.STATE == GameState.RUNNING) {
+        sendStart();
+        while (clientChannel.isConnected()) {
+            send();
             read();
         }
+    }
 
-        clientChannel.close();
+    /**
+     * 告诉服务器新加入了一个客户端
+     * @throws IOException IO异常
+     */
+    private void sendStart() throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+
+        buffer.put(MessageHelper.encodeNewClient(gameController));
+        buffer.flip();
+
+        if (buffer.hasRemaining()) {
+            clientChannel.write(buffer);
+        }
+
+        buffer.clear();
     }
 
     private void send() throws IOException {
         // 需要输送到服务器端的消息
         // 包括游戏中的所有物体
-        Calabash calabash = gameController.getCalabash();
         ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
-        // 对calabash进行序列化
-        buffer.put(SerializationUtils.serialize(calabash));
+
+        buffer.put(MessageHelper.encodeMove(gameController));
+        buffer.put(MessageHelper.encodeShoot(gameController));
+        buffer.put(MessageHelper.encodeMonsterOne(gameController));
+        buffer.put(MessageHelper.encodeMonsterTwo(gameController));
+        buffer.put(MessageHelper.encodeMonsterThree(gameController));
+        buffer.put(MessageHelper.encodeMonsterBullet(gameController));
         buffer.flip();
 
-        clientChannel.write(buffer);
+        if (buffer.hasRemaining()) {
+            clientChannel.write(buffer);
+        }
 
         buffer.clear();
     }
@@ -72,10 +94,7 @@ public class Client {
             return;
         }
 
-        // 反序列化
-        Calabash calabash = SerializationUtils.deserialize(buffer.array());
-        // 将其加入本地的游戏窗口中
-        // gameController.addCalabash(calabash);
+        MessageHelper.decode(buffer.array(), gameController);
     }
 
     public static void main(String[] args) {

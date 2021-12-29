@@ -58,7 +58,8 @@ public class GameController extends JPanel implements Runnable {
      */
     private JLabel skillLabel;
 
-    private Calabash calabash;
+    private Calabash calabashOne;
+    private Calabash calabashTwo;
     private GrandFather grandFather;
     private List<MonsterOne> monsterOneList;
     private List<MonsterTwo> monsterTwoList;
@@ -74,7 +75,7 @@ public class GameController extends JPanel implements Runnable {
     private TimeControl timeControl;
 
     public void start() {
-        calabash = Calabash.getInstance();
+        calabashOne = Calabash.getInstance();
         grandFather = GrandFather.getInstance();
         resetBoard();
         executePool();
@@ -84,7 +85,7 @@ public class GameController extends JPanel implements Runnable {
      * 直接开始游戏
      */
     private void startGame() {
-        calabash = Calabash.getInstance();
+        calabashOne = Calabash.getInstance();
         grandFather = GrandFather.getInstance();
         resetBoard();
         executePool();
@@ -229,18 +230,18 @@ public class GameController extends JPanel implements Runnable {
         int monsterBulletLength = monsterBulletList.size();
         for (int i = 0; i < monsterBulletLength; i++) {
             MonsterBullet bullet = monsterBulletList.get(i);
-            if (GameObject.isCollide(bullet, calabash)) {
+            if (GameObject.isCollide(bullet, calabashOne)) {
                 monsterBulletList.remove(bullet);
                 monsterBulletLength--;
                 // 一次造成的伤害为5点
                 // TODO:改成不同的妖精有不同的伤害
-                calabash.decreaseHP(5);
-                if (calabash.getHP() >= 0) {
-                    HPLabel.setText("HP: " + calabash.getHP());
+                calabashOne.decreaseHP(5);
+                if (calabashOne.getHP() >= 0) {
+                    HPLabel.setText("HP: " + calabashOne.getHP());
                 } else {
                     HPLabel.setText("HP: " + 0);
                 }
-                if (calabash.getHP() <= 0) {
+                if (calabashOne.getHP() <= 0) {
                     // 死亡，结束
                     STATE = GameState.GAME_OVER;
                 }
@@ -287,27 +288,27 @@ public class GameController extends JPanel implements Runnable {
             if (getKeyDown(KeyEvent.VK_W) || getKeyDown(KeyEvent.VK_UP)) {
                 // 向上走y值减小
                 // 判断会不会走出边界
-                calabash.moveUp();
+                calabashOne.moveUp();
                 grandFather.moveUp();
             } else if (getKeyDown(KeyEvent.VK_S) || getKeyDown(KeyEvent.VK_DOWN)) {
                 // 向下走y值增大
                 // 判断会不会走出边界
-                calabash.moveDown();
+                calabashOne.moveDown();
                 grandFather.moveDown();
             } else if (getKeyDown(KeyEvent.VK_A) || getKeyDown(KeyEvent.VK_LEFT)) {
                 // 向左走x值减小
                 // 判断会不会走出边界
-                calabash.moveLeft();
+                calabashOne.moveLeft();
                 grandFather.moveLeft();
             } else if (getKeyDown(KeyEvent.VK_D) || getKeyDown(KeyEvent.VK_RIGHT)) {
                 // 向右走x值增大
                 // 判断会不会走出边界
-                calabash.moveRight();
+                calabashOne.moveRight();
                 grandFather.moveRight();
             } else if (getKeyDown(KeyEvent.VK_J)) {
                 // 按j发射子弹
-                CalabashBullet bullet = calabash.calabashFire();
-                if (TIME % calabash.getFireInterval() == 0) {
+                CalabashBullet bullet = calabashOne.calabashFire();
+                if (TIME % calabashOne.getFireInterval() == 0) {
                     calabashBulletList.add(bullet);
                 }
             } else if (getKeyDown(KeyEvent.VK_ENTER)) {
@@ -320,13 +321,13 @@ public class GameController extends JPanel implements Runnable {
                 }
             } else if (getKeyDown(KeyEvent.VK_X)) {
                 // 按x使用技能
-                if (calabash.haveSkill() && calabash.isFirstUse()) {
-                    calabash.useSkill();
+                if (calabashOne.haveSkill() && calabashOne.isFirstUse()) {
+                    calabashOne.useSkill();
                     // 只能够使用一次技能
-                    calabash.setFirstUse();
-                    if (calabash.getCurSkill().getName() == SkillName.RECOVER_SKILL) {
+                    calabashOne.setFirstUse();
+                    if (calabashOne.getCurSkill().getName() == SkillName.RECOVER_SKILL) {
                         // 更改血量的显示
-                        HPLabel.setText("HP: " + calabash.getHP());
+                        HPLabel.setText("HP: " + calabashOne.getHP());
                     }
                 }
             } else if (getKeyDown(KeyEvent.VK_L)) {
@@ -505,11 +506,11 @@ public class GameController extends JPanel implements Runnable {
                 // 根据时间的间隔给予葫芦娃技能
                 if (TIME % GIVE_SKILL_INTERVAL == 0) {
                     // 清空moveSkill和cdSkill的效果
-                    calabash.clearSkillImpact();
+                    calabashOne.clearSkillImpact();
                     grandFather.clearSkillImpact();
                     grandFather.giveSkill();
-                    skillLabel.setText("curSkill: " + calabash.getCurSkill().getName());
-                    calabash.setFirstUse();
+                    skillLabel.setText("curSkill: " + calabashOne.getCurSkill().getName());
+                    calabashOne.setFirstUse();
                 }
 
                 try {
@@ -540,7 +541,7 @@ public class GameController extends JPanel implements Runnable {
         calabashBulletList.clear();
         STATE = GameState.START;
         score = 0;
-        calabash.resetHP();
+        calabashOne.resetHP();
         resetBoard();
     }
 
@@ -553,7 +554,7 @@ public class GameController extends JPanel implements Runnable {
         // 初始化一些Label
         scoreLabel = new JLabel("Score: " + this.score);
         scoreLabel.setForeground(Color.RED);
-        HPLabel = new JLabel("HP: " + calabash.getHP());
+        HPLabel = new JLabel("HP: " + calabashOne.getHP());
         HPLabel.setForeground(Color.RED);
         skillLabel = new JLabel("curSkill: null");
         skillLabel.setForeground(Color.RED);
@@ -693,7 +694,7 @@ public class GameController extends JPanel implements Runnable {
     }
 
     private void paintCalabash(Graphics g) {
-        g.drawImage(ReadImage.Calabash, calabash.getX(), calabash.getY(), 100, 100, null);
+        g.drawImage(ReadImage.Calabash, calabashOne.getX(), calabashOne.getY(), 100, 100, null);
     }
 
     private void paintGrandfather(Graphics g) {
@@ -759,7 +760,7 @@ public class GameController extends JPanel implements Runnable {
         // 序列化保存葫芦娃
         FileOutputStream fileCalabash = new FileOutputStream(root + "calabash.ser");
         ObjectOutputStream outCalabash = new ObjectOutputStream(fileCalabash);
-        outCalabash.writeObject(calabash);
+        outCalabash.writeObject(calabashOne);
 
         // 序列化保存爷爷
         FileOutputStream fileGrandfather = new FileOutputStream(root + "grandfather.ser");
@@ -837,7 +838,7 @@ public class GameController extends JPanel implements Runnable {
 
         FileInputStream fileCalabash = new FileInputStream(root + "calabash.ser");
         ObjectInputStream inCalabash = new ObjectInputStream(fileCalabash);
-        this.calabash = (Calabash) inCalabash.readObject();
+        this.calabashOne = (Calabash) inCalabash.readObject();
 
         FileInputStream fileGrandfather = new FileInputStream(root + "grandfather.ser");
         ObjectInputStream inGrandfather = new ObjectInputStream(fileGrandfather);
@@ -883,11 +884,13 @@ public class GameController extends JPanel implements Runnable {
         return this.score;
     }
 
-    public Calabash getCalabash() {
-        return this.calabash;
+    public Calabash getCalabashOne() {
+        return this.calabashOne;
     }
 
-
+    public void setCalabashTwo(Calabash calabash) {
+        this.calabashTwo = calabash;
+    }
 
     public List<MonsterOne> getMonsterOneList() {
         return monsterOneList;
