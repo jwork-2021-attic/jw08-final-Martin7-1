@@ -2,18 +2,15 @@ package com.nju.edu.client;
 
 import com.nju.edu.control.GameController;
 import com.nju.edu.screen.GameScreen;
+import com.nju.edu.sprite.Calabash;
 import com.nju.edu.util.GameState;
-import org.json.JSONObject;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.Scanner;
 
 /**
  * @author Zyi
@@ -24,10 +21,11 @@ public class Client {
     private static final int PORT = 8080;
     private GameScreen gameScreen;
     private GameController gameController;
+    private SocketChannel clientChannel;
 
     private void startClient() throws IOException {
         InetSocketAddress hostAddress = new InetSocketAddress(HOST_NAME, PORT);
-        SocketChannel clientChannel = SocketChannel.open(hostAddress);
+        clientChannel = SocketChannel.open(hostAddress);
         clientChannel.configureBlocking(false);
 
         gameScreen = new GameScreen("Calabash Game", Color.WHITE);
@@ -49,16 +47,35 @@ public class Client {
         clientChannel.close();
     }
 
-    private void send() {
+    private void send() throws IOException {
         // 需要输送到服务器端的位置
         // 当前葫芦娃的位置
-        // TODO
+        // 把葫芦娃传送上去即可
+        Calabash calabash = gameController.getCalabash();
+        ByteBuffer buffer = ByteBuffer.allocate(10240);
+        // 对calabash进行序列化
+        buffer.put(SerializationUtils.serialize(calabash));
+        buffer.flip();
+
+        clientChannel.write(buffer);
+
+        buffer.clear();
     }
 
-    private void read() {
+    private void read() throws IOException {
         // 需要从服务器端读取的数据:
-        // 小怪的位置和子弹的位置
-        // TODO
+        // 葫芦娃的位置，小怪的位置和子弹的位置
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        int numRead = -1;
+        numRead = clientChannel.read(buffer);
+
+        if (numRead == -1 || numRead == 0) {
+            return;
+        }
+
+        // 反序列化
+        Calabash calabash = SerializationUtils.deserialize(buffer.array());
+        // 将该客户端的葫芦娃更新
     }
 
     public static void main(String[] args) {

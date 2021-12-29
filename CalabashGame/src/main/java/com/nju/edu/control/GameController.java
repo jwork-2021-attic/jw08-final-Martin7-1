@@ -883,4 +883,8 @@ public class GameController extends JPanel implements Runnable {
     public int getScore() {
         return this.score;
     }
+
+    public Calabash getCalabash() {
+        return this.calabash;
+    }
 }

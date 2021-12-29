@@ -1,10 +1,5 @@
 package com.nju.edu.server;
 
-import com.nju.edu.control.GameController;
-import com.nju.edu.screen.GameScreen;
-import org.json.JSONObject;
-
-import java.awt.*;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -74,11 +69,15 @@ public class Server {
                     channel.register(this.selector, SelectionKey.OP_READ);
                 }
                 if (key.isReadable()) {
-                    this.read(key);
+                    byte[] bytes = this.read(key);
+                    ByteBuffer buffer = ByteBuffer.allocate(1024);
                     // 向所有客户端发送读到的数据
                     // 这里的数据我们只需要
                     for (SocketChannel socketChannel : socketChannels) {
-
+                        buffer.put(bytes);
+                        buffer.flip();
+                        socketChannel.write(buffer);
+                        buffer.clear();
                     }
                     // channel.register(this.selector, SelectionKey.OP_WRITE);
                 }
@@ -111,33 +110,26 @@ public class Server {
      * @param key selector key
      * @throws IOException IO异常
      */
-    private void read(SelectionKey key) throws IOException {
+    private byte[] read(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
-        Socket socket = channel.socket();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        buffer.clear();
+        int numRead = -1;
+        numRead = channel.read(buffer);
 
-        try {
-            int count = channel.read(buffer);
-            if (count > 0) {
-                ByteArrayInputStream input = new ByteArrayInputStream(buffer.array());
-                ObjectInputStream objectInputStream = new ObjectInputStream(input);
-
-                Object obj = objectInputStream.readObject();
-                // TODO: decode the object
-            } else if (count == -1) {
-                System.out.println("客户端已经断开连接");
-                socket.close();
-            }
-        } catch (ClassNotFoundException e) {
-            System.out.println("客户端已经断开连接");
-            key.channel();
-            e.printStackTrace();
-        } finally {
-            // 取消选择器对该通道的注册
-            key.channel();
-            socket.close();
+        if (numRead == -1) {
+            Socket socket = channel.socket();
+            SocketAddress remoteAddr = socket.getRemoteSocketAddress();
+            System.out.println("Connection closed by client: " + remoteAddr);
+            channel.close();
+            key.cancel();
+            return null;
         }
+
+        byte[] data = new byte[numRead];
+        System.arraycopy(buffer.array(), 0, data, 0, numRead);
+        System.out.println("Got: " + new String(data));
+
+        return data;
     }
 
     /**
