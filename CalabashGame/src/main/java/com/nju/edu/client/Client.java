@@ -25,8 +25,6 @@ public class Client implements Runnable {
 
         String TheadName = Thread.currentThread().getName();
         System.out.println("thread: " + TheadName + " start!");
-        // 创建Game Screen
-        gameScreen = new GameScreen("Calabash Game", 30, Color.WHITE);
 
         // TODO:向client write信息
         // 需要将葫芦娃的状态写到服务端上

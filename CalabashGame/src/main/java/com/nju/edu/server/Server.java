@@ -1,7 +1,13 @@
 package com.nju.edu.server;
 
+import com.nju.edu.control.GameController;
+import com.nju.edu.screen.GameScreen;
+
+import java.awt.*;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -11,6 +17,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -118,9 +125,10 @@ public class Server {
     private void read(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
         Socket socket = channel.socket();
+        ObjectInputStream objectInputStream;
 
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
             while (true) {
                 System.out.println(objectInputStream.readObject());
             }
@@ -139,6 +147,18 @@ public class Server {
     private void write(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
         Socket socket = channel.socket();
+
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        Scanner scanner = new Scanner(new InputStreamReader(System.in));
+
+        while (true) {
+            GameScreen gameScreen = new GameScreen("Calabash Game", Color.WHITE);
+            GameController gameController = new GameController(30);
+            gameScreen.add(gameController);
+            gameController.startGame();
+            gameScreen.setVisible(true);
+        }
     }
 
     public static void main(String[] args) {
