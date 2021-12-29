@@ -52,11 +52,13 @@ public class Client {
     private void send() {
         // 需要输送到服务器端的位置
         // 当前葫芦娃的位置
+        // TODO
     }
 
     private void read() {
         // 需要从服务器端读取的数据:
         // 小怪的位置和子弹的位置
+        // TODO
     }
 
     public static void main(String[] args) {

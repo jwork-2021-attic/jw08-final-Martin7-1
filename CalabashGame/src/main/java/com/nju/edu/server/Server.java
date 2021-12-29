@@ -14,9 +14,8 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 /**
  * @author Zyi
@@ -25,13 +24,13 @@ public class Server {
 
     private ServerSocketChannel channel;
     private Selector selector;
-    private SelectionKey mainKey;
 
     // private Handler handler;
 
     private static final int PORT = 8080;
     private static final String ADDRESS = "localhost";
     private int playerNumber = 2;
+    private List<SocketChannel> socketChannels = new ArrayList<>();
 
     public Server() {
         try {
@@ -76,11 +75,17 @@ public class Server {
                 }
                 if (key.isReadable()) {
                     this.read(key);
-                    channel.register(this.selector, SelectionKey.OP_WRITE);
+                    // 向所有客户端发送读到的数据
+                    // 这里的数据我们只需要
+                    for (SocketChannel socketChannel : socketChannels) {
+
+                    }
+                    // channel.register(this.selector, SelectionKey.OP_WRITE);
                 }
                 if (key.isWritable()) {
+                    // 暂时不需要服务端向客户端写数据
                     this.write(key);
-                    channel.register(this.selector, SelectionKey.OP_READ);
+                    // channel.register(this.selector, SelectionKey.OP_READ);
                 }
             }
             it.remove();
