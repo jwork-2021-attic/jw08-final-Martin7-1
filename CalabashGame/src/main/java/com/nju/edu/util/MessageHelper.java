@@ -26,15 +26,49 @@ public class MessageHelper {
      * @param gameController 主界面
      */
     public static void decode(byte[] bytes, GameController gameController) {
+        // 将bytes转换成字符串
+        String temp = new String(bytes);
+        // 判断是不是第一次创建
+        if ("createCalabash".endsWith(temp)) {
+            decodeCalabash(gameController);
+            return;
+        }
+        String[] messages = temp.split(" ");
 
+        for (String message : messages) {
+            if (message.endsWith("CalabashMove")) {
+                String[] pos = message.split(",");
+                // 注意舍去最后一个
+                decodeMove(pos, gameController);
+            } else if (message.endsWith("CalabashBullet")) {
+
+            } else if (message.endsWith("MonsterOne")) {
+
+            } else if (message.endsWith("MonsterTwo")) {
+
+            } else if (message.endsWith("MonsterThree")) {
+
+            } else if (message.endsWith("MonsterBullet")) {
+
+            }
+        }
     }
 
-    private static byte[] decodeCalabash(GameController gameController) {
-        return new byte[1024];
+    /**
+     * 设置新的葫芦娃
+     * @param gameController 主界面
+     */
+    private static void decodeCalabash(GameController gameController) {
+        gameController.setNewCalabash();
     }
 
-    private static byte[] decodeCalabashBullet() {
-        return null;
+    /**
+     * 将葫芦娃的坐标更新
+     * @param pos 坐标
+     * @param gameController 主界面
+     */
+    private static void decodeMove(String[] pos, GameController gameController) {
+        gameController.setCalabashTwoPos(pos[0], pos[1]);
     }
 
     /**
