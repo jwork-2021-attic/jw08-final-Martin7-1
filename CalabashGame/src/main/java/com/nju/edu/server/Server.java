@@ -72,12 +72,15 @@ public class Server {
                 if (key.isAcceptable()) {
                     this.accept(key);
                     System.out.println("用户连接成功");
+                    channel.register(this.selector, SelectionKey.OP_READ);
                 }
                 if (key.isReadable()) {
                     this.read(key);
+                    channel.register(this.selector, SelectionKey.OP_WRITE);
                 }
                 if (key.isWritable()) {
                     this.write(key);
+                    channel.register(this.selector, SelectionKey.OP_READ);
                 }
             }
             it.remove();
@@ -96,12 +99,6 @@ public class Server {
         Socket socket = channel.socket();
         SocketAddress remoteAddr = socket.getRemoteSocketAddress();
         System.out.println("Connected to: " + remoteAddr);
-
-        /*
-         * Register channel with selector for further IO (record it for read/write
-         * operations, here we have used read operation)
-         */
-        channel.register(this.selector, SelectionKey.OP_READ);
     }
 
     /**
@@ -129,12 +126,13 @@ public class Server {
             }
         } catch (ClassNotFoundException e) {
             System.out.println("客户端已经断开连接");
+            key.channel();
             e.printStackTrace();
         } finally {
+            // 取消选择器对该通道的注册
+            key.channel();
             socket.close();
         }
-
-        channel.register(this.selector, SelectionKey.OP_WRITE);
     }
 
     /**
@@ -145,23 +143,12 @@ public class Server {
     private void write(SelectionKey key) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
         Socket socket = channel.socket();
-
-
+        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-
-        GameScreen gameScreen = new GameScreen("Calabash Game", Color.WHITE);
-        GameController gameController = new GameController(30);
-        gameScreen.add(gameController);
-        gameController.start();
-        gameScreen.setVisible(true);
-
-        int score = gameController.getScore();
-        JSONObject object = new JSONObject();
-        object.put("score:", score);
-        objectOutputStream.writeObject(object);
+        // Object object;
+        // objectOutputStream.writeObject(object);
         objectOutputStream.flush();
-
-        // channel.register(this.selector, SelectionKey.OP_READ);
+        channel.write(ByteBuffer.wrap(byteOut.toByteArray()));
     }
 
     public static void main(String[] args) {
