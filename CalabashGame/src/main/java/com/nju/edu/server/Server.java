@@ -1,6 +1,7 @@
 package com.nju.edu.server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -115,7 +116,19 @@ public class Server {
      * @throws IOException IO异常
      */
     private void read(SelectionKey key) throws IOException {
-        // TODO
+        SocketChannel channel = (SocketChannel) key.channel();
+        Socket socket = channel.socket();
+
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+            while (true) {
+                System.out.println(objectInputStream.readObject());
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            socket.close();
+        }
     }
 
     /**
@@ -124,7 +137,8 @@ public class Server {
      * @throws IOException IO异常
      */
     private void write(SelectionKey key) throws IOException {
-        // TODO
+        SocketChannel channel = (SocketChannel) key.channel();
+        Socket socket = channel.socket();
     }
 
     public static void main(String[] args) {
