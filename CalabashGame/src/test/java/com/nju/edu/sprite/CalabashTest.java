@@ -17,7 +17,7 @@ public class CalabashTest {
 
     @BeforeClass
     public static void setUp() {
-        calabash = new Calabash();
+        calabash = new Calabash(100, 320);
     }
 
     @After

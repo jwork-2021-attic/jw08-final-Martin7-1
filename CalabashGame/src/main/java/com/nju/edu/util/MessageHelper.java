@@ -6,7 +6,6 @@ import com.nju.edu.control.GameController;
 import com.nju.edu.sprite.MonsterOne;
 import com.nju.edu.sprite.MonsterThree;
 import com.nju.edu.sprite.MonsterTwo;
-import com.sun.istack.internal.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -99,7 +98,6 @@ public class MessageHelper {
      * @param gameController 主界面
      * @return create new Calabash
      */
-    @NotNull
     public static byte[] encodeNewClient(GameController gameController) {
         return "createCalabash".getBytes(StandardCharsets.UTF_8);
     }
@@ -109,7 +107,6 @@ public class MessageHelper {
      * @param gameController 主界面
      * @return message
      */
-    @NotNull
     public static byte[] encodeMove(GameController gameController) {
         int x = gameController.getCalabashOne().getX();
         int y = gameController.getCalabashOne().getY();
@@ -123,7 +120,6 @@ public class MessageHelper {
      * @param gameController 主界面
      * @return message
      */
-    @NotNull
     public static byte[] encodeShoot(GameController gameController) {
         List<CalabashBullet> list = gameController.getCalabashBulletList();
         StringBuilder message = new StringBuilder();
@@ -144,7 +140,6 @@ public class MessageHelper {
      * @param gameController 主界面
      * @return message
      */
-    @NotNull
     public static byte[] encodeMonsterOne(GameController gameController) {
         List<MonsterOne> list = gameController.getMonsterOneList();
         StringBuilder message = new StringBuilder();
@@ -165,7 +160,6 @@ public class MessageHelper {
      * @param gameController 主界面
      * @return message
      */
-    @NotNull
     public static byte[] encodeMonsterTwo(GameController gameController) {
         List<MonsterTwo> list = gameController.getMonsterTwoList();
         StringBuilder message = new StringBuilder();
@@ -186,7 +180,6 @@ public class MessageHelper {
      * @param gameController 主界面
      * @return message
      */
-    @NotNull
     public static byte[] encodeMonsterThree(GameController gameController) {
         // format: i,x1,y1,x2,y2,...,xi,yi,monsterThree
         List<MonsterThree> list = gameController.getMonsterThreeList();
@@ -204,7 +197,6 @@ public class MessageHelper {
         return message.toString().getBytes(StandardCharsets.UTF_8);
     }
 
-    @NotNull
     public static byte[] encodeMonsterBullet(GameController gameController) {
         List<MonsterBullet> list = gameController.getMonsterBulletList();
         StringBuilder message = new StringBuilder();
