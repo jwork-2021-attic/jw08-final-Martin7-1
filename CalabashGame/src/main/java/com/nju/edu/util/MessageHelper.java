@@ -36,6 +36,7 @@ public class MessageHelper {
         String[] messages = temp.split(" ");
 
         for (String message : messages) {
+            System.out.println(message);
             String[] arr = message.split(",");
             String[] positions = Arrays.copyOfRange(arr, 0, arr.length - 1);
             Message msg = MessageFactory.createMessage(message);

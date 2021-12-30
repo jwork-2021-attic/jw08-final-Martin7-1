@@ -495,13 +495,7 @@ public class GameController extends JPanel implements Runnable {
                 for (MonsterOne monsterOne : monsterOneList) {
                     if (isInGameScreen(monsterOne)) {
                         MonsterBullet monsterBullet = monsterOne.monsterFire();
-                        monsterBulletList.add(monsterBullet);
-                        try {
-                            client.send(Message.Monster_Shoot);
-                            System.out.println("[MonsterThread][Msg]: Monster Shoot");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        addMonsterBullet(monsterBullet);
                     }
                 }
             }
@@ -509,13 +503,7 @@ public class GameController extends JPanel implements Runnable {
                 for (MonsterTwo monsterTwo : monsterTwoList) {
                     if (isInGameScreen(monsterTwo)) {
                         MonsterBullet monsterBullet = monsterTwo.monsterFire();
-                        monsterBulletList.add(monsterBullet);
-                        try {
-                            client.send(Message.Monster_Shoot);
-                            System.out.println("[MonsterThread][Msg]: Monster Shoot");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        addMonsterBullet(monsterBullet);
                     }
                 }
             }
@@ -523,14 +511,19 @@ public class GameController extends JPanel implements Runnable {
                 for (MonsterThree monsterThree : monsterThreeList) {
                     if (isInGameScreen(monsterThree)) {
                         MonsterBullet monsterBullet = monsterThree.monsterFire();
-                        monsterBulletList.add(monsterBullet);
-                        try {
-                            client.send(Message.Monster_Shoot);
-                            System.out.println("[MonsterThread][Msg]: Monster Shoot");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        addMonsterBullet(monsterBullet);
                     }
+                }
+            }
+        }
+
+        private void addMonsterBullet(MonsterBullet bullet) {
+            monsterBulletList.add(bullet);
+            if (gameMode == GameMode.Multi_Player) {
+                try {
+                    client.send(Message.Monster_Shoot);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -1025,8 +1018,8 @@ public class GameController extends JPanel implements Runnable {
      * @param clazz 妖精的类名
      */
     public void decodeMonster(String[] pos, Class<?> clazz) {
-        System.out.println("[gameController]: add monster " + clazz.getName());
-        switch (clazz.getName()) {
+        System.out.println("[gameController]: add monster " + clazz.getSimpleName());
+        switch (clazz.getSimpleName()) {
             case "MonsterOne":
                 addMonsterOne(pos);
                 break;
