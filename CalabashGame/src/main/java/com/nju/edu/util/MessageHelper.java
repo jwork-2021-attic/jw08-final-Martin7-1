@@ -9,6 +9,7 @@ import com.nju.edu.sprite.MonsterTwo;
 import com.sun.istack.internal.NotNull;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,21 +37,25 @@ public class MessageHelper {
         String[] messages = temp.split(" ");
 
         for (String message : messages) {
-            if (message.endsWith("CalabashMove")) {
-                String[] pos = message.split(",");
-                // 注意舍去最后一个
-                decodeMove(pos, gameController);
-            } else if (message.endsWith("CalabashBullet")) {
+            String[] arr = message.split(",");
+            String[] positions = Arrays.copyOfRange(arr, 0, arr.length - 1);
+            Message msg = MessageFactory.createMessage(message);
+            decodeMsg(positions, msg, gameController);
+        }
+    }
 
-            } else if (message.endsWith("MonsterOne")) {
-
-            } else if (message.endsWith("MonsterTwo")) {
-
-            } else if (message.endsWith("MonsterThree")) {
-
-            } else if (message.endsWith("MonsterBullet")) {
-
-            }
+    private static void decodeMsg(String[] positions, Message msg, GameController gameController) {
+        switch (msg) {
+            case Calabash_Move:
+                decodeMove(positions, gameController);
+                break;
+            case Calabash_Shoot:
+                decodeCalabashBullet(positions, gameController);
+                break;
+            case Monster_One:
+                decodeMonsterOne(positions, gameController);
+                break;
+            default:
         }
     }
 
@@ -69,6 +74,24 @@ public class MessageHelper {
      */
     private static void decodeMove(String[] pos, GameController gameController) {
         gameController.setCalabashTwoPos(pos[0], pos[1]);
+    }
+
+    /**
+     * 更新葫芦娃的子弹坐标
+     * @param positions 坐标
+     * @param gameController 主界面
+     */
+    private static void decodeCalabashBullet(String[] positions, GameController gameController) {
+        gameController.decodeCalabashBullet(positions);
+    }
+
+    /**
+     * 更新妖怪
+     * @param positions
+     * @param gameController
+     */
+    private static void decodeMonsterOne(String[] positions, GameController gameController) {
+        // TODO
     }
 
     /**

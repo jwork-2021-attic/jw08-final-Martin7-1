@@ -22,6 +22,11 @@ public class Client {
     private GameScreen gameScreen;
     private GameController gameController;
     private SocketChannel clientChannel;
+    private final int clientID;
+
+    public Client(int clientID) {
+        this.clientID = clientID;
+    }
 
     private void startClient() throws IOException {
         InetSocketAddress hostAddress = new InetSocketAddress(HOST_NAME, PORT);
@@ -29,7 +34,7 @@ public class Client {
         clientChannel.configureBlocking(false);
 
         gameScreen = new GameScreen("Calabash Game", Color.WHITE);
-        gameController = new GameController(30);
+        gameController = new GameController(30, clientID);
         gameScreen.add(gameController);
         gameScreen.setVisible(true);
         gameController.setFocusable(true);
@@ -41,7 +46,6 @@ public class Client {
         // 发送消息到服务器端
         sendStart();
         while (clientChannel.isConnected()) {
-            send();
             read();
         }
     }
@@ -68,12 +72,6 @@ public class Client {
         // 包括游戏中的所有物体
         ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
 
-        buffer.put(MessageHelper.encodeMove(gameController));
-        buffer.put(MessageHelper.encodeShoot(gameController));
-        buffer.put(MessageHelper.encodeMonsterOne(gameController));
-        buffer.put(MessageHelper.encodeMonsterTwo(gameController));
-        buffer.put(MessageHelper.encodeMonsterThree(gameController));
-        buffer.put(MessageHelper.encodeMonsterBullet(gameController));
         buffer.flip();
 
         if (buffer.hasRemaining()) {
@@ -98,10 +96,12 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        try {
-            new Client().startClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Runnable runnable = () -> {
+            try {
+                new Client(1).startClient();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
     }
 }

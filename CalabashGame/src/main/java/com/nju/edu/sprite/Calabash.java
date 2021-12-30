@@ -103,7 +103,7 @@ public class Calabash extends Sprite {
 
     public void useSkill() {
         System.out.println("Use skill: " + this.skill.getName());
-        this.skill.start();
+        this.skill.start(this);
     }
 
     public boolean isFirstUse() {

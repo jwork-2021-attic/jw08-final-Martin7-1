@@ -72,6 +72,7 @@ public class GameController extends JPanel implements Runnable {
     private GrandfatherThread grandfatherThread;
     private MonsterThread monsterThread;
     private TimeControl timeControl;
+    private final int gameControllerID;
 
     public void start() {
         calabashOne = new Calabash(100, 320);
@@ -110,8 +111,9 @@ public class GameController extends JPanel implements Runnable {
         executePool();
     }
 
-    public GameController(int fps) {
+    public GameController(int fps, int gameControllerID) {
         this.fps = fps;
+        this.gameControllerID = gameControllerID;
         // 并发容器的使用
         // 线程安全的arrayList
         this.monsterOneList = new CopyOnWriteArrayList<>();
@@ -286,6 +288,7 @@ public class GameController extends JPanel implements Runnable {
                 // 向上走y值减小
                 // 判断会不会走出边界
                 calabashOne.moveUp();
+                // MessageHelper.sendMsg()
             } else if (getKeyDown(KeyEvent.VK_S) || getKeyDown(KeyEvent.VK_DOWN)) {
                 // 向下走y值增大
                 // 判断会不会走出边界
@@ -862,7 +865,7 @@ public class GameController extends JPanel implements Runnable {
     }
 
     public void setNewCalabash() {
-        this.calabashTwo = new Calabash();
+        this.calabashTwo = new Calabash(100, 320);
     }
 
     /**
@@ -889,6 +892,28 @@ public class GameController extends JPanel implements Runnable {
 
     public List<CalabashBullet> getCalabashBulletList() {
         return calabashBulletList;
+    }
+
+    /**
+     * 设置葫芦娃子弹的坐标，注意如果列表里已经有该坐标的子弹，那么我们就跳过
+     * @param positions 坐标
+     */
+    public void decodeCalabashBullet(String[] positions) {
+        for (int i = 0; i < positions.length; i += 2) {
+            boolean isHaveBullet = false;
+            int x = Integer.parseInt(positions[i]);
+            int y = Integer.parseInt(positions[i+1]);
+            for (CalabashBullet bullet : calabashBulletList) {
+                if (bullet.getX() == x && bullet.getY() == y) {
+                    // 说明该子弹已经在之中了
+                    isHaveBullet = true;
+                }
+            }
+
+            if (!isHaveBullet) {
+
+            }
+        }
     }
 
     public List<MonsterBullet> getMonsterBulletList() {
