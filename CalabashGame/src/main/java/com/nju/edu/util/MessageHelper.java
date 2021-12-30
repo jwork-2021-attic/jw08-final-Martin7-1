@@ -57,6 +57,15 @@ public class MessageHelper {
             case Monster_One:
                 decodeMonsterOne(positions, gameController);
                 break;
+            case Monster_Two:
+                decodeMonsterTwo(positions, gameController);
+                break;
+            case Monster_Three:
+                decodeMonsterThree(positions, gameController);
+                break;
+            case Monster_Shoot:
+                decodeMonsterBullet(positions, gameController);
+                break;
             default:
         }
     }
@@ -89,11 +98,23 @@ public class MessageHelper {
 
     /**
      * 更新妖怪
-     * @param positions
-     * @param gameController
+     * @param positions 位置
+     * @param gameController 主界面
      */
     private static void decodeMonsterOne(String[] positions, GameController gameController) {
-        // TODO
+        gameController.decodeMonster(positions, MonsterOne.class);
+    }
+
+    private static void decodeMonsterTwo(String[] positions, GameController gameController) {
+        gameController.decodeMonster(positions, MonsterTwo.class);
+    }
+
+    private static void decodeMonsterThree(String[] positions, GameController gameController) {
+        gameController.decodeMonster(positions, MonsterThree.class);
+    }
+
+    private static void decodeMonsterBullet(String[] positions, GameController gameController) {
+        gameController.decodeMonsterBullet(positions);
     }
 
     /**
@@ -118,6 +139,18 @@ public class MessageHelper {
                 break;
             case Calabash_Shoot:
                 bytes = encodeShoot(gameController);
+                break;
+            case Monster_One:
+                bytes = encodeMonsterOne(gameController);
+                break;
+            case Monster_Two:
+                bytes = encodeMonsterTwo(gameController);
+                break;
+            case Monster_Three:
+                bytes = encodeMonsterThree(gameController);
+                break;
+            case Monster_Shoot:
+                bytes = encodeMonsterBullet(gameController);
                 break;
             default:
         }
