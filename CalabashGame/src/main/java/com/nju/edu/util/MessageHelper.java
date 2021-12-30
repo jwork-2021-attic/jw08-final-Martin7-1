@@ -135,7 +135,7 @@ public class MessageHelper {
         int y = gameController.getCalabashOne().getY();
 
         // format: x, y, calabashMove
-        return ("" + x + ",y" + ",CalabashMove ").getBytes(StandardCharsets.UTF_8);
+        return ("" + x + "," + y + ",CalabashMove ").getBytes(StandardCharsets.UTF_8);
     }
 
     /**

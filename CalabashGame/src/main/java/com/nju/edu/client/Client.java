@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Zyi
@@ -102,7 +103,9 @@ public class Client {
             try {
                 new Client().startClient();
                 System.out.println(Client.clientID);
-            } catch (IOException e) {
+
+                TimeUnit.MILLISECONDS.sleep(200);
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         };

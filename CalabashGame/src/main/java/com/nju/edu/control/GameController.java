@@ -38,7 +38,7 @@ public class GameController extends JPanel implements Runnable {
     /**
      * 游戏的状态
      */
-    public static GameState STATE = GameState.RUNNING;
+    public static GameState STATE = GameState.START;
     /**
      * 用一个线程池来管理妖精的出现
      */
@@ -158,7 +158,6 @@ public class GameController extends JPanel implements Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            repaint();
         }
     }
 
@@ -293,7 +292,6 @@ public class GameController extends JPanel implements Runnable {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                repaint();
             }
         }
 
@@ -452,7 +450,6 @@ public class GameController extends JPanel implements Runnable {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                repaint();
             }
         }
 
@@ -927,7 +924,9 @@ public class GameController extends JPanel implements Runnable {
     }
 
     public void setNewCalabash() {
-        this.calabashTwo = new Calabash(100, 320);
+        // this.calabashTwo = new Calabash(100, 320);
+        // nothing to do
+        // init before run the method
     }
 
     /**
@@ -965,7 +964,9 @@ public class GameController extends JPanel implements Runnable {
     public void decodeCalabashBullet(String[] positions) {
         // calabashTwo fire一次发送一次消息，所以这里只要加入列表即可
         CalabashBullet calabashBullet = calabashTwo.calabashFire();
-        this.calabashBulletList.add(calabashBullet);
+        if (TIME % calabashTwo.getFireInterval() == 0) {
+            this.calabashBulletList.add(calabashBullet);
+        }
     }
 
     public List<MonsterBullet> getMonsterBulletList() {
