@@ -9,7 +9,6 @@ import com.nju.edu.sprite.MonsterTwo;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Zyi
@@ -28,16 +27,10 @@ public class MessageHelper {
     public static void decode(byte[] bytes, GameController gameController) {
         // 将bytes转换成字符串
         String temp = new String(bytes);
-        // 判断是不是第一次创建
-        if ("createCalabash ".endsWith(temp)) {
-            decodeCalabash(gameController);
-            return;
-        }
         String[] messages = temp.split(" ");
 
         for (String message : messages) {
             String[] arr = message.split(",");
-            System.out.println(arr[arr.length - 1]);
             String[] positions = Arrays.copyOfRange(arr, 0, arr.length - 1);
             Message msg = MessageFactory.createMessage(message);
             if (msg == null) {
@@ -69,14 +62,6 @@ public class MessageHelper {
                 break;
             default:
         }
-    }
-
-    /**
-     * 设置新的葫芦娃
-     * @param gameController 主界面
-     */
-    private static void decodeCalabash(GameController gameController) {
-        gameController.setNewCalabash();
     }
 
     /**
@@ -119,15 +104,6 @@ public class MessageHelper {
     }
 
     /**
-     * 传输创建新的葫芦娃的消息
-     * @param gameController 主界面
-     * @return create new Calabash
-     */
-    public static byte[] encodeNewClient(GameController gameController) {
-        return "createCalabash ".getBytes(StandardCharsets.UTF_8);
-    }
-
-    /**
      * 根据消息类型来进行编码的传输
      * @param message 消息类型
      * @return 消息
@@ -136,6 +112,7 @@ public class MessageHelper {
         byte[] bytes = null;
         switch (message) {
             case Calabash_Move:
+                System.out.println("[encode], " + Integer.parseInt(pos[0]) + ", " + Integer.parseInt(pos[1]));
                 bytes = encodeMove(pos);
                 break;
             case Calabash_Shoot:

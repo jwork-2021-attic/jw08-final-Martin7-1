@@ -274,7 +274,7 @@ public class GameController extends JPanel implements Runnable {
 
 
         public CalabashThread() {
-            System.out.println("[CalabashThead]created");
+            System.out.println("[CalabashThead]created " + thread.getName());
             init();
         }
 
@@ -284,8 +284,9 @@ public class GameController extends JPanel implements Runnable {
             while (!isExited) {
                 moving();
                 calabashBulletMove(TIME);
+                sendMsg();
 
-                if (TIME % GIVE_SKILL_INTERVAL == 0) {
+                if (TIME % GIVE_SKILL_INTERVAL == 0 && calabashOne != null) {
                     // 清空moveSkill和cdSkill的效果
                     calabashOne.clearSkillImpact();
                     calabashOne.giveSkill();
@@ -308,29 +309,28 @@ public class GameController extends JPanel implements Runnable {
                 // 判断会不会走出边界
                 calabashOne.moveUp();
                 if (gameMode == GameMode.Multi_Player) {
-                    // 通过客户端传输消息
-                    sendMsg();
+                    // sendMsg();
                 }
             } else if (getKeyDown(KeyEvent.VK_S) || getKeyDown(KeyEvent.VK_DOWN)) {
                 // 向下走y值增大
                 // 判断会不会走出边界
                 calabashOne.moveDown();
                 if (gameMode == GameMode.Multi_Player) {
-                    sendMsg();
+                    // sendMsg();
                 }
             } else if (getKeyDown(KeyEvent.VK_A) || getKeyDown(KeyEvent.VK_LEFT)) {
                 // 向左走x值减小
                 // 判断会不会走出边界
                 calabashOne.moveLeft();
                 if (gameMode == GameMode.Multi_Player) {
-                    sendMsg();
+                    // sendMsg();
                 }
             } else if (getKeyDown(KeyEvent.VK_D) || getKeyDown(KeyEvent.VK_RIGHT)) {
                 // 向右走x值增大
                 // 判断会不会走出边界
                 calabashOne.moveRight();
                 if (gameMode == GameMode.Multi_Player) {
-                    sendMsg();
+                    // sendMsg();
                 }
             } else if (getKeyDown(KeyEvent.VK_J)) {
                 // 按j发射子弹
@@ -341,7 +341,6 @@ public class GameController extends JPanel implements Runnable {
                     if (gameMode == GameMode.Multi_Player) {
                         try {
                             client.send(Message.Calabash_Shoot, new String[]{String.valueOf(bullet.getX()), String.valueOf(bullet.getY())});
-                            System.out.println("[CalabashThread][Msg]: Calabash Shoot");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -385,7 +384,7 @@ public class GameController extends JPanel implements Runnable {
         private void sendMsg() {
             // 通过客户端传输消息
             try {
-                client.send(Message.Calabash_Move, new String[]{String.valueOf(calabashTwo.getX()), String.valueOf(calabashTwo.getY())});
+                client.send(Message.Calabash_Move, new String[]{String.valueOf(calabashOne.getX()), String.valueOf(calabashOne.getY())});
                 System.out.println("[CalabashThread][Msg]: Calabash Move");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -432,7 +431,7 @@ public class GameController extends JPanel implements Runnable {
 
         public MonsterThread() {
             // test
-            System.out.println("[MonsterThread]created");
+            System.out.println("[MonsterThread]created " + thread.getName());
         }
 
         @Override
@@ -537,7 +536,6 @@ public class GameController extends JPanel implements Runnable {
                 if (gameMode == GameMode.Multi_Player) {
                     try {
                         client.send(Message.Monster_One, new String[]{String.valueOf(x), String.valueOf(y)});
-                        System.out.println("[MonsterThread][Msg]: MonsterOne Appear");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -552,7 +550,6 @@ public class GameController extends JPanel implements Runnable {
                 if (gameMode == GameMode.Multi_Player) {
                     try {
                         client.send(Message.Monster_Two, new String[]{String.valueOf(x), String.valueOf(y)});
-                        System.out.println("[MonsterThread][Msg]: MonsterTwo Appear");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -566,7 +563,6 @@ public class GameController extends JPanel implements Runnable {
                 if (gameMode == GameMode.Multi_Player) {
                     try {
                         client.send(Message.Monster_Three, new String[]{String.valueOf(x), String.valueOf(y)});
-                        System.out.println("[MonsterThread][Msg]: MonsterThree Appear");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -935,8 +931,10 @@ public class GameController extends JPanel implements Runnable {
      */
     public void setCalabashTwoPos(String xPos, String yPos) {
         if (calabashTwo != null) {
+            System.out.println("[CalabashTwo]: CalabashTwo Move");
             this.calabashTwo.setX(Integer.parseInt(xPos));
             this.calabashTwo.setY(Integer.parseInt(yPos));
+
         }
     }
 
@@ -978,7 +976,6 @@ public class GameController extends JPanel implements Runnable {
      * @param clazz 妖精的类名
      */
     public void decodeMonster(String[] pos, Class<?> clazz) {
-        System.out.println("[gameController]: add monster " + clazz.getSimpleName());
         switch (clazz.getSimpleName()) {
             case "MonsterOne":
                 addMonsterOne(pos);
