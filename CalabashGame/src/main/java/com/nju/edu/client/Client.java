@@ -3,6 +3,7 @@ package com.nju.edu.client;
 import com.nju.edu.control.GameController;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.sprite.Calabash;
+import com.nju.edu.util.Message;
 import com.nju.edu.util.MessageHelper;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -22,10 +23,10 @@ public class Client {
     private GameScreen gameScreen;
     private GameController gameController;
     private SocketChannel clientChannel;
-    private final int clientID;
+    private static int clientID;
 
-    public Client(int clientID) {
-        this.clientID = clientID;
+    public Client() {
+        clientID++;
     }
 
     private void startClient() throws IOException {
@@ -34,7 +35,7 @@ public class Client {
         clientChannel.configureBlocking(false);
 
         gameScreen = new GameScreen("Calabash Game", Color.WHITE);
-        gameController = new GameController(30, clientID);
+        gameController = new GameController(30, clientID, this);
         gameScreen.add(gameController);
         gameScreen.setVisible(true);
         gameController.setFocusable(true);
@@ -67,11 +68,12 @@ public class Client {
         buffer.clear();
     }
 
-    private void send() throws IOException {
+    public void send(Message msg) throws IOException {
         // 需要输送到服务器端的消息
         // 包括游戏中的所有物体
         ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
 
+        buffer.put(MessageHelper.encode(msg, gameController));
         buffer.flip();
 
         if (buffer.hasRemaining()) {
@@ -96,12 +98,11 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        Runnable runnable = () -> {
-            try {
-                new Client(1).startClient();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        };
+        try {
+            new Client().startClient();
+            System.out.println(Client.clientID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

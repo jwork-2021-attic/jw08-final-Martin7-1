@@ -2,13 +2,12 @@ package com.nju.edu.control;
 
 import com.nju.edu.bullet.CalabashBullet;
 import com.nju.edu.bullet.MonsterBullet;
+import com.nju.edu.client.Client;
 import com.nju.edu.screen.GameScreen;
 import com.nju.edu.screen.RenderThread;
 import com.nju.edu.skill.SkillName;
 import com.nju.edu.sprite.*;
-import com.nju.edu.util.GameState;
-import com.nju.edu.util.ReadImage;
-import com.nju.edu.util.TimeControl;
+import com.nju.edu.util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,6 +72,11 @@ public class GameController extends JPanel implements Runnable {
     private MonsterThread monsterThread;
     private TimeControl timeControl;
     private final int gameControllerID;
+    private Client client;
+    /**
+     * 默认情况是单人模式的
+     */
+    private GameMode gameMode = GameMode.Single_Player;
 
     public void start() {
         calabashOne = new Calabash(100, 320);
@@ -111,9 +115,14 @@ public class GameController extends JPanel implements Runnable {
         executePool();
     }
 
-    public GameController(int fps, int gameControllerID) {
+    public GameController(int fps, int gameControllerID, Client client) {
         this.fps = fps;
         this.gameControllerID = gameControllerID;
+        this.client = client;
+        if (client != null) {
+            // 多人模式
+            gameMode = GameMode.Multi_Player;
+        }
         // 并发容器的使用
         // 线程安全的arrayList
         this.monsterOneList = new CopyOnWriteArrayList<>();
@@ -288,28 +297,68 @@ public class GameController extends JPanel implements Runnable {
                 // 向上走y值减小
                 // 判断会不会走出边界
                 calabashOne.moveUp();
-                // MessageHelper.sendMsg()
+                if (gameMode == GameMode.Multi_Player) {
+                    // 通过客户端传输消息
+                    try {
+                        client.send(Message.Calabash_Move);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (getKeyDown(KeyEvent.VK_S) || getKeyDown(KeyEvent.VK_DOWN)) {
                 // 向下走y值增大
                 // 判断会不会走出边界
                 calabashOne.moveDown();
+                if (gameMode == GameMode.Multi_Player) {
+                    // 通过客户端传输消息
+                    try {
+                        client.send(Message.Calabash_Move);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (getKeyDown(KeyEvent.VK_A) || getKeyDown(KeyEvent.VK_LEFT)) {
                 // 向左走x值减小
                 // 判断会不会走出边界
                 calabashOne.moveLeft();
+                if (gameMode == GameMode.Multi_Player) {
+                    // 通过客户端传输消息
+                    try {
+                        client.send(Message.Calabash_Move);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (getKeyDown(KeyEvent.VK_D) || getKeyDown(KeyEvent.VK_RIGHT)) {
                 // 向右走x值增大
                 // 判断会不会走出边界
                 calabashOne.moveRight();
+                if (gameMode == GameMode.Multi_Player) {
+                    // 通过客户端传输消息
+                    try {
+                        client.send(Message.Calabash_Move);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (getKeyDown(KeyEvent.VK_J)) {
                 // 按j发射子弹
                 CalabashBullet bullet = calabashOne.calabashFire();
                 if (TIME % calabashOne.getFireInterval() == 0) {
                     calabashBulletList.add(bullet);
                 }
+                if (gameMode == GameMode.Multi_Player) {
+                    // 通过客户端传输消息
+                    try {
+                        client.send(Message.Calabash_Shoot);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (getKeyDown(KeyEvent.VK_ENTER)) {
                 if (GameController.STATE == GameState.START) {
                     STATE = GameState.RUNNING;
+                    // TODO: press enter to start
                     // startGame();
                 } else if (GameController.STATE == GameState.GAME_OVER) {
                     STATE = GameState.RUNNING;
@@ -899,21 +948,9 @@ public class GameController extends JPanel implements Runnable {
      * @param positions 坐标
      */
     public void decodeCalabashBullet(String[] positions) {
-        for (int i = 0; i < positions.length; i += 2) {
-            boolean isHaveBullet = false;
-            int x = Integer.parseInt(positions[i]);
-            int y = Integer.parseInt(positions[i+1]);
-            for (CalabashBullet bullet : calabashBulletList) {
-                if (bullet.getX() == x && bullet.getY() == y) {
-                    // 说明该子弹已经在之中了
-                    isHaveBullet = true;
-                }
-            }
-
-            if (!isHaveBullet) {
-
-            }
-        }
+        // calabashTwo fire一次发送一次消息，所以这里只要加入列表即可
+        CalabashBullet calabashBullet = calabashTwo.calabashFire();
+        this.calabashBulletList.add(calabashBullet);
     }
 
     public List<MonsterBullet> getMonsterBulletList() {

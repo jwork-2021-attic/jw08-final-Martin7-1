@@ -103,11 +103,31 @@ public class MessageHelper {
     }
 
     /**
+     * 根据消息类型来进行编码的传输
+     * @param message 消息类型
+     * @return 消息
+     */
+    public static byte[] encode(Message message, GameController gameController) {
+        byte[] bytes = null;
+        switch (message) {
+            case Calabash_Move:
+                bytes = encodeMove(gameController);
+                break;
+            case Calabash_Shoot:
+                bytes = encodeShoot(gameController);
+                break;
+            default:
+        }
+
+        return bytes;
+    }
+
+    /**
      * 传输移动的消息
      * @param gameController 主界面
      * @return message
      */
-    public static byte[] encodeMove(GameController gameController) {
+    private static byte[] encodeMove(GameController gameController) {
         int x = gameController.getCalabashOne().getX();
         int y = gameController.getCalabashOne().getY();
 
@@ -120,7 +140,7 @@ public class MessageHelper {
      * @param gameController 主界面
      * @return message
      */
-    public static byte[] encodeShoot(GameController gameController) {
+    private static byte[] encodeShoot(GameController gameController) {
         List<CalabashBullet> list = gameController.getCalabashBulletList();
         StringBuilder message = new StringBuilder();
         message.append(list.size()).append(",");
