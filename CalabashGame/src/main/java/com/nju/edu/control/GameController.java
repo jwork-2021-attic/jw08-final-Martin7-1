@@ -38,7 +38,7 @@ public class GameController extends JPanel implements Runnable {
     /**
      * 游戏的状态
      */
-    public static GameState STATE = GameState.START;
+    public static GameState STATE = GameState.RUNNING;
     /**
      * 用一个线程池来管理妖精的出现
      */
@@ -79,6 +79,9 @@ public class GameController extends JPanel implements Runnable {
     private GameMode gameMode = GameMode.Single_Player;
 
     public void start() {
+        if (gameMode == GameMode.Multi_Player) {
+            calabashTwo = new Calabash(100, 100);
+        }
         calabashOne = new Calabash(100, 320);
         resetBoard();
         executePool();
@@ -88,6 +91,9 @@ public class GameController extends JPanel implements Runnable {
      * 直接开始游戏
      */
     private void startGame() {
+        if (gameMode == GameMode.Multi_Player) {
+            calabashTwo = new Calabash(100, 320);
+        }
         calabashOne = new Calabash(100, 320);
         resetBoard();
         executePool();
@@ -689,6 +695,9 @@ public class GameController extends JPanel implements Runnable {
         } else if (STATE == GameState.RUNNING) {
             // 绘制葫芦娃
             paintCalabash(g);
+            if (gameMode == GameMode.Multi_Player) {
+                paintCalabashTwo(g);
+            }
             // 绘制妖精
             paintMonster(g);
             // 绘制一组妖精子弹
@@ -737,6 +746,10 @@ public class GameController extends JPanel implements Runnable {
 
     private void paintCalabash(Graphics g) {
         g.drawImage(ReadImage.Calabash, calabashOne.getX(), calabashOne.getY(), 100, 100, null);
+    }
+
+    private void paintCalabashTwo(Graphics g) {
+        g.drawImage(ReadImage.Calabash, calabashTwo.getX(), calabashTwo.getY(), 100, 100, null);
     }
 
     private void paintMonster(Graphics g) {
@@ -923,8 +936,10 @@ public class GameController extends JPanel implements Runnable {
      * @param yPos y坐标
      */
     public void setCalabashTwoPos(String xPos, String yPos) {
-        this.calabashTwo.setX(Integer.parseInt(xPos));
-        this.calabashTwo.setY(Integer.parseInt(yPos));
+        if (calabashTwo != null) {
+            this.calabashTwo.setX(Integer.parseInt(xPos));
+            this.calabashTwo.setY(Integer.parseInt(yPos));
+        }
     }
 
     public List<MonsterOne> getMonsterOneList() {

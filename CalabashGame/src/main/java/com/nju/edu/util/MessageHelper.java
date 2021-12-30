@@ -39,6 +39,9 @@ public class MessageHelper {
             String[] arr = message.split(",");
             String[] positions = Arrays.copyOfRange(arr, 0, arr.length - 1);
             Message msg = MessageFactory.createMessage(message);
+            if (msg == null) {
+                continue;
+            }
             decodeMsg(positions, msg, gameController);
         }
     }

@@ -98,11 +98,16 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        try {
-            new Client().startClient();
-            System.out.println(Client.clientID);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Runnable runnable = () -> {
+            try {
+                new Client().startClient();
+                System.out.println(Client.clientID);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+
+        new Thread(runnable).start();
+        new Thread(runnable).start();
     }
 }
