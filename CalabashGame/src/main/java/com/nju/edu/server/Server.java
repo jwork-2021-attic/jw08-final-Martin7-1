@@ -123,6 +123,7 @@ public class Server {
 
         byte[] data = new byte[numRead];
         System.arraycopy(buffer.array(), 0, data, 0, numRead);
+        buffer.clear();
 
         return data;
     }

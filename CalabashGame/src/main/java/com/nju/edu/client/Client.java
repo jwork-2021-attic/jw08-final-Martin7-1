@@ -11,6 +11,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.TimeUnit;
 
@@ -69,12 +70,12 @@ public class Client {
         buffer.clear();
     }
 
-    public void send(Message msg) throws IOException {
+    public void send(Message msg, String[] pos) throws IOException {
         // 需要输送到服务器端的消息
         // 包括游戏中的所有物体
         ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
 
-        buffer.put(MessageHelper.encode(msg, gameController));
+        buffer.put(MessageHelper.encode(msg, pos));
         buffer.flip();
 
         if (buffer.hasRemaining()) {
